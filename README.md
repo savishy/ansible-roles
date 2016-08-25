@@ -63,15 +63,17 @@ end
 This provisioning mechanism will first download `ansible-roles` from Github
 into your `pwd/roles` directory.
 
-### reference the roles ###
+### call the roles ###
+
+When calling the roles you just need to ensure the folder structure is obeyed.
 
 ```
 
 - name: setup monitoring
   hosts: monitors
   roles:
-    - ansible-roles/ansible-install-docker
-    - ansible-roles/ansible-efk-docker
+    - ansible-roles/install-docker
+    - ansible-roles/efk-docker
 ```
 
 
