@@ -1,0 +1,4 @@
+---
+# defaults file for jenkins-docker
+jenkins_http_port: 8081
+jenkins_home: /var/lib/jenkins
