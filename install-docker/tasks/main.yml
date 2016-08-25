@@ -1,0 +1,78 @@
+---
+# add Docker repo to get the latest docker
+- name: add Docker repository
+  yum_repository:
+    name: docker
+    description: Docker Repository
+    baseurl: https://yum.dockerproject.org/repo/main/centos/7/
+    gpgcheck: yes
+    gpgkey: https://yum.dockerproject.org/gpg
+
+# update yum
+- name: yum update
+  yum:
+    name: '*'
+    state: latest
+
+# install docker
+- name: install docker
+  yum:
+    name: docker
+    update_cache: yes
+    state: latest
+
+# docker needs to expose its API
+# so we need to push our defaults file in
+- name: push docker service settings
+  template:
+    src: sysconfig.docker
+    dest: /etc/sysconfig/docker
+
+# install jdk
+- name: install JDK
+  yum:
+    name: java-1.8.0-openjdk
+    update_cache: yes
+    state: latest
+
+    # install jdk
+- name: install JDK
+  yum:
+    name: java-1.8.0-openjdk-devel
+    update_cache: yes
+    state: latest
+
+# install pip
+- name: install pip
+  shell: curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && python get-pip.py
+
+# install docker-py as it is needed by docker-image
+- name: install docker-py
+  pip:
+    name: docker-py
+    state: present
+    executable: /usr/local/bin/pip
+  notify: start docker service
+
+# install docker-compose as it is needed by docker-image
+- name: install docker-compose
+  pip:
+    name: docker-compose
+    state: present
+    executable: /usr/local/bin/pip
+  notify: start docker service
+
+- name: create docker group
+  group:
+    name: docker
+
+- name: add ec2 user to docker group
+  # command: usermod -a -G docker ec2-user
+  user:
+    name: ec2-user
+    groups: docker
+
+- name: restart docker service
+  service:
+    name: docker
+    state: restarted

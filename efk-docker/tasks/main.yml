@@ -1,0 +1,45 @@
+---
+# send fluent.conf
+# setup elastic-fluentd-kibana application stack
+# using docker compose.
+
+- file:
+    path: /vagrant/fluentd
+    state: directory
+
+- name: send fluent conf
+  template:
+    src: fluent.conf
+    dest: /vagrant/fluentd/fluent.conf
+
+- name: run docker-compose
+  docker_service:
+    project_name: efkstack
+    definition:
+      version: '2'
+      services:
+        kibana:
+          image: kibana
+          ports:
+            - "5601:5601"
+          links:
+            - elasticsearch
+          depends_on:
+            - elasticsearch
+        elasticsearch:
+          image: elasticsearch
+          ports:
+            - "9200:9200"
+          depends_on:
+            - fluentd
+        fluentd:
+          image: fluent/fluentd
+          ports:
+            - "24224:24224"
+          volumes:
+            - /data:/fluentd/log
+            - /vagrant/fluentd:/fluentd/etc/
+          environment:
+            - FLUENTD_CONF=fluent.conf
+  register: output
+- debug: var=output

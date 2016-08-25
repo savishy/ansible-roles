@@ -43,21 +43,40 @@ what sources to use. It should list *this* github repository as the source.
   scm: git
 ```
 
-### Call the roles ###
+### download the roles ###
 
-Now all you have to do is reference these roles correctly.
-
-E.g the following task calls the `ansible-install-docker` role from this repo
-on a set of hosts called `dockerhosts`.
+If you are using Vagrant + Ansible this is how you would do it:
 
 ```
----
-- name: Example of using ansible-install-docker
-  hosts: dockerhosts
-    roles:
-      - ansible-roles/ansible-install-docker
+config.vm.provision "ansible" do |ansible|
+    ansible.galaxy_role_file = "requirements.yml"
+    ansible.galaxy_roles_path = "./roles"
+    ansible.groups = {
+    # some groups of hosts to execute the playbook on
+    }
+
+    ansible.verbose = "vvvv"
+    ansible.playbook = "playbook.yml"
+end
 ```
+
+This provisioning mechanism will first download `ansible-roles` from Github
+into your `pwd/roles` directory.
+
+### reference the roles ###
+
+```
+
+- name: setup monitoring
+  hosts: monitors
+  roles:
+    - ansible-roles/ansible-install-docker
+    - ansible-roles/ansible-efk-docker
+```
+
+
 
 # References #
 
 1. https://github.com/ansible/ansible/issues/16804
+1. https://www.vagrantup.com/docs/provisioning/ansible_common.html#galaxy_command
