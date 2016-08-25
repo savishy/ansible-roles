@@ -5,12 +5,8 @@ FROM ubuntu:16.04
 RUN apt-get update -qqy
 RUN apt-get install -y wget software-properties-common curl git openjdk-8-jdk-headless
 
-# make jenkins home persistent so that it can
-# survive even if container is restarted.
-VOLUME {{ jenkins_home }}
-
 # env vars
-ENV JENKINS_HOME {{ jenkins_home }}
+ENV JENKINS_HOME "{{ jenkins_home }}"
 ENV JAVA_OPTS "-Djava.awt.headless=true -Dhudson.diyChunking=false"
 ENV JENKINS_OPTS "--httpPort={{ jenkins_http_port }}"
 # install Jenkins
@@ -19,8 +15,8 @@ RUN sh -c 'echo deb http://pkg.jenkins-ci.org/debian-stable binary/ > /etc/apt/s
 RUN apt-get update -qqy --allow-unauthenticated
 RUN apt-get install -y jenkins
 
-# create job config
-RUN mkdir -p $JENKINS_HOME/ref $JENKINS_HOME/jobs/petclinic-build/ $JENKINS_HOME/jobs/petclinic-docker/
+# create jenkins folders
+RUN mkdir $JENKINS_HOME/ref 
 
 # Global config for docker build steps
 COPY org.jenkinsci.plugins.dockerbuildstep.DockerBuilder.xml $JENKINS_HOME
@@ -35,6 +31,15 @@ RUN sh -c "$JENKINS_HOME/plugin.sh $JENKINS_HOME/plugins.txt"
 
 # prevent jenkins from showing "unlock jenkins" dialog.
 RUN echo 2.7.1 > $JENKINS_HOME/ref/jenkins.install.InstallUtil.lastExecVersion
+
+# make jenkins home persistent so that it can
+# survive even if container is restarted.
+# NOTE: 
+# any changes made to jenkins home after declaring it as VOLUME
+# will be discarded.
+# for this reason it has to be the last declaration.
+# https://docs.docker.com/engine/reference/builder/#/volume
+VOLUME {{ jenkins_home }}
 
 # Start Jenkins!
 CMD exec java $JAVA_OPTS -jar /usr/share/jenkins/jenkins.war $JENKINS_OPTS
