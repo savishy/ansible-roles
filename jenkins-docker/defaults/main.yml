@@ -1,4 +1,15 @@
 ---
-# defaults file for jenkins-docker
+# default port for Jenkins
 jenkins_http_port: 8081
+
+# folder on host that will be mounted as jenkins_home
+jenkins_home_host: /jenkins
+
+# Jenkins home directory inside the docker container.
 jenkins_home: /var/lib/jenkins
+
+# Jenkins Docker Image Name
+jenkins_image: "jenkins-ci"
+
+# Jenkins Docker Container name
+jenkins_container: "jenkins-ci-container"

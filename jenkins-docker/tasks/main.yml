@@ -7,12 +7,14 @@
     dest: /vagrant/dockerfiles/jenkins-ci/Dockerfile
 
 - name: build jenkins docker image if needed
-  command: docker build -t jenkins-ci /vagrant/dockerfiles/jenkins-ci/
+  command: docker build --rm -t {{ jenkins_image }} /vagrant/dockerfiles/jenkins-ci/
 
-- shell: docker images
-  register: result
+# jenkins home on host which will be mapped to jenkins home on container.
 
-- debug: var=result verbosity=2
+- name: create jenkins home on host
+  file:
+    path: "{{ jenkins_home_host }}"
+    state: directory
 
 # run docker jenkins container
 # TODO running this as root. see dockerfile
@@ -21,13 +23,15 @@
 
 - name: run jenkins docker container
   docker_container:
-    name: jenkins-ci-container
-    image: jenkins-ci
+    name: "{{ jenkins_container }}"
+    image: "{{ jenkins_image }}"
     ports: "{{ jenkins_http_port }}:{{ jenkins_http_port }}"
     exposed: "{{ jenkins_http_port }}"
     recreate: true
     detach: true
-    volumes: "/var/run/docker.sock:/var/run/docker.sock"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "{{ jenkins_home_host }}:{{ jenkins_home }}"
 
 # get IP of Jenkins container
 # http://stackoverflow.com/a/33457976/682912

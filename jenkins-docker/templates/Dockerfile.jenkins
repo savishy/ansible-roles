@@ -5,6 +5,10 @@ FROM ubuntu:16.04
 RUN apt-get update -qqy
 RUN apt-get install -y wget software-properties-common curl git openjdk-8-jdk-headless
 
+# make jenkins home persistent so that it can
+# survive even if container is restarted.
+VOLUME {{ jenkins_home }}
+
 # env vars
 ENV JENKINS_HOME {{ jenkins_home }}
 ENV JAVA_OPTS "-Djava.awt.headless=true -Dhudson.diyChunking=false"
@@ -17,12 +21,6 @@ RUN apt-get install -y jenkins
 
 # create job config
 RUN mkdir -p $JENKINS_HOME/ref $JENKINS_HOME/jobs/petclinic-build/ $JENKINS_HOME/jobs/petclinic-docker/
-# copy job config as root (no other way)
-COPY jobs/petclinic-build/config.xml $JENKINS_HOME/jobs/petclinic-build/config.xml
-COPY jobs/petclinic-docker/config.xml $JENKINS_HOME/jobs/petclinic-docker/config.xml
-
-# Copy credentials for docker hub (TODO issue #11)
-COPY credentials.xml  $JENKINS_HOME
 
 # Global config for docker build steps
 COPY org.jenkinsci.plugins.dockerbuildstep.DockerBuilder.xml $JENKINS_HOME
