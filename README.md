@@ -12,37 +12,6 @@ To pull these roles automatically when running a playbook do the following.
 
 ## Usage ##
 
-### Modify `playbook.yml` to call `ansible-galaxy` ###
-
-In your playbook add the line at the top, which will call `ansible-galaxy` and
-pull all roles from this repository to the `roles` folder.
-
-```
-- name: download dependent roles
-  command: ansible-galaxy install -r requirements.yml -p roles
-```
-
-Where
-* `roles` is the name of the folder where all your Ansible roles are stored.
-* `requirements.yml` lists the details of where to pull down your roles from.
-  (detailed below)
-
-### Create/Modify `requirements.yml` ###
-
-Your `requirements.yml` is used by the `ansible-galaxy` tool to understand
-what sources to use. It should list *this* github repository as the source.
-
-(Note: you can extend this file to pull from multiple sources).
-
-
-```
----
-- src: https://github.com/savishy/ansible-roles/
-  name: ansible-roles
-  version: master
-  scm: git
-```
-
 ### download the roles ###
 
 If you are using Vagrant + Ansible this is how you would do it:
@@ -62,6 +31,26 @@ end
 
 This provisioning mechanism will first download `ansible-roles` from Github
 into your `pwd/roles` directory.
+
+The `requirements.yml` lists the details of where to pull down your roles from.
+  (detailed below)
+
+### Create/Modify `requirements.yml` ###
+
+Your `requirements.yml` is used by the `ansible-galaxy` tool to understand
+what sources to use. It should list *this* github repository as the source.
+
+(Note: you can extend this file to pull from multiple sources).
+
+
+```
+---
+- src: https://github.com/savishy/ansible-roles/
+  name: ansible-roles
+  version: master
+  scm: git
+```
+
 
 ### call the roles ###
 
