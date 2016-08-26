@@ -13,7 +13,7 @@
 
 # send required files
 - copy:
-    src: "{{ role_path }}/files"
+    src: "{{ role_path }}/files/"
     dest: "{{ jenkins_home_host }}"
 
 # jenkins home on host which will be mapped to jenkins home on container.
