@@ -1,10 +1,15 @@
 ---
 
+- name: create jenkins home on host
+  file:
+    path: "{{ jenkins_home_host }}"
+    state: directory
+
 # process the Dockerfile template
-- name: process the Dockerfile template
+- name: send templated Dockerfile to Jenkins Home
   template:
     src: Dockerfile.jenkins
-    dest: /vagrant/dockerfiles/jenkins-ci/Dockerfile
+    dest: "{{ jenkins_home_host }}"
 
 # send plugin list
 - copy:
@@ -16,21 +21,10 @@
     src: plugin.sh
     dest:  "{{ jenkins_home_host }}/plugin.sh"
 
-# execute plugin script
-- name: run plugin script
-  command: "sh plugin.sh plugins.txt"
-  args:
-    chdir: "{{ jenkins_home_host }}"
-
 # jenkins home on host which will be mapped to jenkins home on container.
 
-- name: create jenkins home on host
-  file:
-    path: "{{ jenkins_home_host }}"
-    state: directory
-
 - name: build jenkins docker image if needed
-  command: docker build --rm -t {{ jenkins_image }} /vagrant/dockerfiles/jenkins-ci/
+  command: docker build --rm -t {{ jenkins_image }} {{ jenkins_home_host }}
 
 # run docker jenkins container
 # TODO running this as root. see dockerfile
