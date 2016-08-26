@@ -11,15 +11,10 @@
     src: Dockerfile.jenkins
     dest: "{{ jenkins_home_host }}/Dockerfile"
 
-# send plugin list
+# send required files
 - copy:
-    src: plugins.txt
-    dest: "{{ jenkins_home_host }}/plugins.txt"
-
-# send plugin list
-- copy:
-    src: plugin.sh
-    dest:  "{{ jenkins_home_host }}/plugin.sh"
+    src: "{{ role_path }}/files"
+    dest: "{{ jenkins_home_host }}"
 
 # jenkins home on host which will be mapped to jenkins home on container.
 
