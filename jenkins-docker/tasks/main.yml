@@ -9,7 +9,7 @@
 - name: send templated Dockerfile to Jenkins Home
   template:
     src: Dockerfile.jenkins
-    dest: "{{ jenkins_home_host }}"
+    dest: "{{ jenkins_home_host }}/Dockerfile"
 
 # send plugin list
 - copy:
