@@ -7,7 +7,8 @@ RUN apt-get install -y wget software-properties-common curl git openjdk-8-jdk-he
 
 # env vars
 ENV JENKINS_HOME "{{ jenkins_home }}"
-ENV JAVA_OPTS "-Djava.awt.headless=true -Dhudson.diyChunking=false"
+# prevent jenkins from running setup wizard
+ENV JAVA_OPTS "-Djava.awt.headless=true -Dhudson.diyChunking=false -Djenkins.install.runSetupWizard=false"
 ENV JENKINS_OPTS "--httpPort={{ jenkins_http_port }}"
 # install Jenkins
 RUN wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | apt-key add -
@@ -16,7 +17,7 @@ RUN apt-get update -qqy --allow-unauthenticated
 RUN apt-get install -y jenkins
 
 # create jenkins folders
-RUN mkdir $JENKINS_HOME/ref 
+RUN mkdir -p $JENKINS_HOME $JENKINS_HOME/ref $JENKINS_HOME/jobs
 
 # Global config for docker build steps
 COPY org.jenkinsci.plugins.dockerbuildstep.DockerBuilder.xml $JENKINS_HOME
@@ -30,7 +31,8 @@ WORKDIR $JENKINS_HOME
 RUN sh -c "$JENKINS_HOME/plugin.sh $JENKINS_HOME/plugins.txt"
 
 # prevent jenkins from showing "unlock jenkins" dialog.
-RUN echo 2.7.1 > $JENKINS_HOME/ref/jenkins.install.InstallUtil.lastExecVersion
+# http://stackoverflow.com/a/37172067/682912
+RUN echo 2.7.1 > $JENKINS_HOME/jenkins.install.InstallUtil.lastExecVersion
 
 # make jenkins home persistent so that it can
 # survive even if container is restarted.
