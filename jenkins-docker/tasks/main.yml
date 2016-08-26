@@ -6,6 +6,16 @@
     src: Dockerfile.jenkins
     dest: /vagrant/dockerfiles/jenkins-ci/Dockerfile
 
+# send plugin list
+- name: send list of plugins
+  copy:
+    src: plugins.txt
+    dest: /vagrant/dockerfiles/jenkins-ci/plugins.txt
+
+# execute plugin script
+- name: run plugin script
+    script: plugin.sh plugins.txt
+
 # jenkins home on host which will be mapped to jenkins home on container.
 
 - name: create jenkins home on host
