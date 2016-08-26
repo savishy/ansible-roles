@@ -33,6 +33,7 @@
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "{{ jenkins_home_host }}:{{ jenkins_home }}"
 
+# this step sets a fact called container_ip pointing to jenkins IP
 - include: ../includes/get-ip-of-docker-container.yml containername="{{ jenkins_container }}"
 - include: ../includes/wait-until-jenkins-is-available.yml
 

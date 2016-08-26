@@ -41,7 +41,7 @@ RUN echo 2.7.1 > $JENKINS_HOME/jenkins.install.InstallUtil.lastExecVersion
 # will be discarded.
 # for this reason it has to be the last declaration.
 # https://docs.docker.com/engine/reference/builder/#/volume
-VOLUME {{ jenkins_home }}
+# VOLUME {{ jenkins_home }}
 
 # Start Jenkins!
 CMD exec java $JAVA_OPTS -jar /usr/share/jenkins/jenkins.war $JENKINS_OPTS

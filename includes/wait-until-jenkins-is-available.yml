@@ -3,7 +3,7 @@
 # http://stackoverflow.com/a/23957310/682912
 
 - name: Wait untils Jenkins web API is available
-  shell: curl --head --silent http://{{ jenkins_ip }}:{{ jenkins_http_port }}/cli/
+  shell: curl --head --silent http://{{ container_ip }}:{{ jenkins_http_port }}/cli/
   register: result
   until: result.stdout.find("200 OK") != -1
   retries: 10

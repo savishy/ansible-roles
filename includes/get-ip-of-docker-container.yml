@@ -12,4 +12,4 @@
 # http://docs.ansible.com/ansible/set_fact_module.html
 - name: get IP of query result
   set_fact:
-    jenkins_ip: "{{ _container_query.stdout | regex_replace('\\s','') }}"
+    container_ip: "{{ _container_query.stdout | regex_replace('\\s','') }}"
