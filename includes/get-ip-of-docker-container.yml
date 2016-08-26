@@ -1,0 +1,15 @@
+---
+# get IP of a docker container
+# http://stackoverflow.com/a/33457976/682912
+
+# How to use this:
+# - include: ../includes/get-ip-of-docker-container.yml containername=<name of container>
+- name: query IP of client container
+  shell: "docker exec jenkins-ci-container hostname -I"
+  register: _container_query
+
+# set ansible fact corresponding to jenkins IP address
+# http://docs.ansible.com/ansible/set_fact_module.html
+- name: get IP of query result
+  set_fact:
+    jenkins_ip: "{{ _container_query.stdout | regex_replace('\\s','') }}"

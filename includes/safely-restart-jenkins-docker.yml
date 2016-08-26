@@ -1,0 +1,5 @@
+---
+- name: restart docker jenkins
+  command: docker restart {{ jenkins_container }}
+
+- include: wait-until-jenkins-is-available.yml
