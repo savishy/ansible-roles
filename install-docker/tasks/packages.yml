@@ -13,12 +13,14 @@
     gpgcheck: yes
     gpgkey: https://yum.dockerproject.org/gpg
   when: ansible_distribution == 'CentOS'
+  become: true
 
 - name: add Docker repository
   apt_repository:
     filename: docker
     repo: "deb https://apt.dockerproject.org/repo ubuntu-trusty main"
   when: ansible_distribution == 'Ubuntu'
+  become: true
 
 # install required packages
 - name: install {{ item }}
@@ -29,13 +31,34 @@
     - curl
     - python
     - docker
+  become: true
+
+# list of centos only packages
+- name: install {{ item }} for CentOS
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
     - java-1.8.0
     - java-1.8.0-openjdk-devel
-    - pip
+  when: ansible_distribution == 'CentOS'
+  become: true
+
+# Install packages specific for ubuntu
+- name: install {{ item }} for Ubuntu
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+  when: ansible_distribution == 'Ubuntu'
+  become: true
 
 # install pip
 - name: install pip
   shell: curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && python get-pip.py
+  become: true
 
 # install docker-py as it is needed by docker-image
 - name: install docker-py
@@ -44,6 +67,7 @@
     state: present
     executable: /usr/local/bin/pip
   notify: start docker service
+  become: true
 
 # install docker-compose as it is needed by docker-image
 - name: install docker-compose
@@ -52,3 +76,4 @@
     state: present
     executable: /usr/local/bin/pip
   notify: start docker service
+  become: true
