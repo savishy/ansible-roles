@@ -1,6 +1,6 @@
 ---
 
-- include packages.yml
+- include 'packages.yml'
 
 # docker needs to expose its API
 # so we need to push our defaults file in
