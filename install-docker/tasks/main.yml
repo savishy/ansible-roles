@@ -23,7 +23,7 @@
 - name: add ec2 user to docker group
   # command: usermod -a -G docker ec2-user
   user:
-    name: {{ docker_user }}
+    name: "{{ docker_user }}"
     groups: docker
 
 - name: restart docker service
