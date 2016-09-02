@@ -1,2 +1,4 @@
 ---
 # defaults file for ansible-install-docker
+- docker_user: docker
+- docker_api_port: 2375

@@ -8,6 +8,13 @@
   template:
     src: sysconfig.docker
     dest: /etc/sysconfig/docker
+  when: ansible_distribution == 'CentOS'
+
+- name: push docker service settings
+  template:
+    src: default.docker
+    dest: /etc/default/docker
+  when: ansible_distribution == 'Ubuntu'
 
 - name: create docker group
   group:
@@ -16,7 +23,7 @@
 - name: add ec2 user to docker group
   # command: usermod -a -G docker ec2-user
   user:
-    name: ec2-user
+    name: {{ docker_user }}
     groups: docker
 
 - name: restart docker service
