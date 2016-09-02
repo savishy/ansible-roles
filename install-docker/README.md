@@ -1,17 +1,27 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+`install-docker`
+
+This Ansible Role installs Docker, Docker Machine and Compose on a Linux
+host. I wrote this to reuse roles between various docker projects.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Vagrant (recommended)
+- An Ubuntu or CentOS Vagrant box.
+
+This role has been tested on the vagrant boxes `lattice/ubuntu-trusty-64` and `perconajayj/centos-x86_64`.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```
+docker_user: the default user for docker
+docker_api_port: the default port on which docker listens
+
+```
 
 Dependencies
 ------------
@@ -21,12 +31,11 @@ A list of other roles hosted on Galaxy should go here, plus any details in regar
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
+```
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
-
+      - { role: ansible-roles/install-docker, docker_user: vagrant }
+```
 License
 -------
 
@@ -35,4 +44,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+http://github.com/savishy

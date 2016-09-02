@@ -16,14 +16,14 @@
   become: true
 
 # add Docker repo to get the latest docker
-- name: add Docker repository
+- name: add Docker repository for CentOS
   yum_repository:
     name: docker
     description: Docker Repository
     baseurl: https://yum.dockerproject.org/repo/main/centos/7/
     gpgcheck: yes
     gpgkey: https://yum.dockerproject.org/gpg
-  when: ansible_distribution == 'CentOS'
+  when: ansible_distribution == "CentOS"
   become: true
 
 # add apt key for ubuntu
@@ -62,7 +62,6 @@
   pip:
     name: docker-py
     state: present
-    executable: /usr/local/bin/pip
   notify: start docker service
   become: true
 
@@ -71,6 +70,5 @@
   pip:
     name: docker-compose
     state: present
-    executable: /usr/local/bin/pip
   notify: start docker service
   become: true
