@@ -1,0 +1,27 @@
+---
+- include: setup.yml
+- name: clear existing ec2 rules
+  ec2_group:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    name: "{{ ec2_group_name }}"
+    description: "ansible-managed ec2 security group"
+    vpc_id: "{{ ec2_vpc_id }}"
+    region: "{{ ec2_region }}"
+    purge_rules: true
+
+- name: modify ec2 rules to allow incoming traffic from My IP address
+  ec2_group:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    name: "{{ ec2_group_name }}"
+    description: "ansible-managed ec2 security group"
+    vpc_id: "{{ ec2_vpc_id }}"
+    region: "{{ ec2_region }}"
+    purge_rules: false
+    rules:
+      - proto: "{{ item.proto }}"
+        from_port: "{{ item.from }}"
+        to_port: "{{ item.to }}"
+        cidr_ip: "{{ my_ipaddr.stdout }}/32"
+  with_items: ec2_ports
