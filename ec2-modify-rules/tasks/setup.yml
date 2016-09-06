@@ -1,0 +1,21 @@
+---
+
+- name: install prerequisites
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - curl
+    - python
+  become: true
+
+- name: install pip
+  shell: curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && python get-pip.py
+  become: true
+
+- name: install boto
+  pip:
+    name: boto
+    state: present
+  become: true
+
