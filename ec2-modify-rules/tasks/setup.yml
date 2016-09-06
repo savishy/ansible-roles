@@ -1,7 +1,5 @@
 ---
-- name: get hosts IP address
-  local_action: command wget http://ipinfo.io/ip -qO -
-  register: my_ipaddr
+- include: ../includes/get-ip-of-my-machine.yml
 
 - name: install prerequisites
   package:

@@ -6,7 +6,7 @@ ec2_group_name: vish_agility_aws_test
 ec2_region: ap-south-1
 ec2_vpc_id: vpc-f4f2079d
 ec2_ports:
-  - {proto: tcp, from: 80, to: 80, cidr_ip: 0.0.0.0/0}
-  - {proto: tcp, from: 22, to: 22, cidr_ip: 0.0.0.0/0}
-  - {proto: tcp, from: 8080, to: 8080, cidr_ip: 0.0.0.0/0}
-  - {proto: tcp, from: 8081, to: 8081, cidr_ip: 0.0.0.0/0}
+  - {proto: tcp, from: 80, to: 80}
+  - {proto: tcp, from: 22, to: 22}
+  - {proto: tcp, from: 8080, to: 8080}
+  - {proto: tcp, from: 8081, to: 8081}
