@@ -56,7 +56,8 @@
 - name: install pip
   shell: >
     curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && python get-pip.py
-  creates: /usr/bin/pip
+  args:
+    creates: /usr/bin/pip
   become: true
 
 # install docker-py as it is needed by docker-image
