@@ -65,7 +65,6 @@
   pip:
     name: docker-py
     state: present
-  notify: start docker service
   become: true
 
 # install docker-compose as it is needed by docker-image
@@ -73,5 +72,4 @@
   pip:
     name: docker-compose
     state: present
-  notify: start docker service
   become: true

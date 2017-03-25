@@ -30,7 +30,7 @@
     groups: docker
   become: true
 
-- name: restart docker service
+- name: start/restart docker service
   service:
     name: docker
     state: restarted
