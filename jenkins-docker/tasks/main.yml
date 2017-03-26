@@ -1,5 +1,10 @@
 ---
 
+- name: create jenkins group
+  group:
+    name: "{{jenkins_group}}"
+    state: present
+    
 - name: create jenkins user account
   user:
     name: "{{jenkins_user}}"
