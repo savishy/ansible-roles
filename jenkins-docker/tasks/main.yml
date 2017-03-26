@@ -18,6 +18,7 @@
     state: directory
     owner: "{{jenkins_user}}"
     group: "{{jenkins_group}}"
+    mode: 0777
   become: true
 
 # process the Dockerfile template
@@ -26,8 +27,9 @@
     src: Dockerfile.jenkins
     dest: "{{ jenkins_home_host }}/Dockerfile"
 
-# send required files
-- copy:
+# send other required files
+- name: send other files to Jenkins home
+  copy:
     src: "{{ role_path }}/files/"
     dest: "{{ jenkins_home_host }}"
 
