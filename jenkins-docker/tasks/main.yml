@@ -4,7 +4,7 @@
   group:
     name: "{{jenkins_group}}"
     state: present
-    
+  become: true
 - name: create jenkins user account
   user:
     name: "{{jenkins_user}}"
