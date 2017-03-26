@@ -1,9 +1,19 @@
 ---
 
+- name: create jenkins user account
+  user:
+    name: "{{jenkins_user}}"
+    group: "{{jenkins_group}}"
+    home: "{{jenkins_home_host}}"
+  become: true
+
 - name: create jenkins home on host
   file:
     path: "{{ jenkins_home_host }}"
     state: directory
+    owner: "{{jenkins_user}}"
+    group: "{{jenkins_group}}"
+  become: true
 
 # process the Dockerfile template
 - name: send templated Dockerfile to Jenkins Home
@@ -41,4 +51,3 @@
 # this step sets a fact called container_ip pointing to jenkins IP
 - include: ../includes/get-ip-of-docker-container.yml containername="{{ jenkins_container }}"
 - include: ../includes/wait-until-jenkins-is-available.yml
-

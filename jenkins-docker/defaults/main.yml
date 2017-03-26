@@ -3,7 +3,7 @@
 jenkins_http_port: 8081
 
 # folder on host that will be mounted as jenkins_home
-jenkins_home_host: /jenkins
+jenkins_home_host: /opt/jenkins_home
 
 # Jenkins home directory inside the docker container.
 jenkins_home: /var/lib/jenkins
@@ -13,3 +13,6 @@ jenkins_image: "jenkins-ci"
 
 # Jenkins Docker Container name
 jenkins_container: "jenkins-ci-container"
+
+jenkins_user: "jenkins"
+jenkins_group: "jenkins"

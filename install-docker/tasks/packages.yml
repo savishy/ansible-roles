@@ -53,10 +53,15 @@
   become: true
 
 # install pip
-- name: install pip
-  shell: >
-    curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && python get-pip.py
+- name: get pip install script
+  get_url:
+    url: "https://bootstrap.pypa.io/get-pip.py"
+    dest: "/tmp/get-pip.py"
+
+- name: run pip install script
+  command: python get-pip.py
   args:
+    chdir: "/tmp"
     creates: /usr/bin/pip
   become: true
 
