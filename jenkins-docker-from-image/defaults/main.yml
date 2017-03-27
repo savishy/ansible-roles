@@ -3,3 +3,4 @@ image_version: 1.0
 image_name: "savishy/docker-jenkins:{{image_version}}"
 container_name: "docker-jenkins-container"
 jenkins_home_host: "/opt/jenkins_home"
+jenkins_http_port: 8081

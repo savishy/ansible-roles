@@ -33,7 +33,7 @@
     state: started
     restart: yes
     ports:
-      - "8081:8081"
+      - "{{jenkins_http_port}}:{{jenkins_http_port}}"
     volumes:
       - "{{jenkins_home_host}}:/var/lib/jenkins"
 
