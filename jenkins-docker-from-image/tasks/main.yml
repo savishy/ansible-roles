@@ -1,0 +1,38 @@
+---
+- name: create jenkins group
+  group:
+    name: jenkins
+    state: present
+  become: true
+
+- name: create jenkins user
+  user:
+    name: jenkins
+    group: jenkins
+    state: present
+    home: "{{jenkins_home_host}}"
+  become: true
+
+- name: create jenkins home directory
+  file:
+    name: "{{jenkins_home_host}}"
+    state: directory
+    owner: jenkins
+    group: jenkins
+    mode: 0777
+  become: true
+
+- name: ensure jenkins docker image present
+  docker_image:
+    name: "{{image_name}}"
+    state: present
+- name: run container off the image
+  docker_container:
+    name: "{{container_name}}"
+    image: "{{image_name}}"
+    state: started
+    restart: yes
+    ports:
+      - "8081:8081"
+    volumes:
+      - "{{jenkins_home_host}}:/var/lib/jenkins"
