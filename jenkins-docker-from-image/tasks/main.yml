@@ -36,3 +36,7 @@
       - "8081:8081"
     volumes:
       - "{{jenkins_home_host}}:/var/lib/jenkins"
+
+# this step sets a fact called container_ip pointing to jenkins IP
+- include: ../includes/get-ip-of-docker-container.yml containername="{{container_name}}"
+- include: ../includes/wait-until-jenkins-is-available.yml
