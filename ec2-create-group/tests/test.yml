@@ -1,5 +1,14 @@
 ---
 - hosts: localhost
-  remote_user: root
+
+  pre_tasks:
+    - fail:
+        msg: "value {{item}} not set in environment"
+      when: "{{item}} == ''"
+      with_items:
+        - aws_access_key
+        - aws_secret_key
   roles:
-    - ec2-modify-rules
+    - ec2-create-group
+
+  post_tasks:

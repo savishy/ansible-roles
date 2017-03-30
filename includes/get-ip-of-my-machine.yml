@@ -2,3 +2,9 @@
 - name: get hosts IP address
   local_action: command wget http://ipinfo.io/ip -qO -
   register: my_ipaddr
+  tags:
+    - always
+
+- fail:
+    msg: "could not retrieve host's IP address"
+  when: "my_ipaddr == ''"

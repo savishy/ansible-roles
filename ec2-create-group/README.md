@@ -1,17 +1,47 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Create EC2 Security Group with predefined port rules.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+* Python, pip and Boto get automatically installed by this role.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+**Variables from System Environment**
+
+The following role variables are picked up from your system's environment variables:
+
+```
+aws_access_key: picked up from "AWS_ACCESS_KEY"
+aws_secret_key: picked up from "AWS_SECRET_KEY"
+```
+
+**Automatically Calculated Variables**
+
+The `host_ip` role variable contains your machine's IP address.
+It is automatically calculated.
+
+**EC2-specific variables**
+
+The following EC2-specific variables have some default values.
+
+```
+ec2_group_name
+ec2_region
+ec2_vpc_id
+```
+
+The following variable is a list of ports and protocols to open up.
+ec2_ports:
+   - { proto: "tcp", from: "80", to: "80" }
+   - { proto: "tcp", from: "22", to: "22" }
+   - { proto: "tcp", from: "8080", to: "8080" }
+   - { proto: "tcp", from: "8081", to: "8081" }
+```
 
 Dependencies
 ------------
