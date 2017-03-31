@@ -1,5 +1,5 @@
 ---
-image_version: 1.2
+image_version: 1.3
 image_name: "savishy/docker-jenkins:{{image_version}}"
 container_name: "docker-jenkins-container"
 jenkins_home_host: "/opt/jenkins_home"
