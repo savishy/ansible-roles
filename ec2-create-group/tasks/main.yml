@@ -24,4 +24,5 @@
         from_port: "{{ item.from }}"
         to_port: "{{ item.to }}"
         cidr_ip: "{{ my_ipaddr.stdout }}/32"
-  with_items: ec2_ports
+  with_items:
+    - "{{ec2_ports}}"
