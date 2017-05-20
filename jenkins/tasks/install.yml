@@ -1,0 +1,19 @@
+---
+- name: jenkins key
+  apt_key:
+    url: https://pkg.jenkins.io/debian/jenkins-ci.org.key
+    state: present
+  become: true
+
+- name: jenkins repository
+  apt_repository:
+    repo: deb http://pkg.jenkins.io/debian-stable binary/
+    filename: "jenkins"
+    state: present
+
+- name: jenkins installation
+  package:
+    name: jenkins
+    state: latest
+
+- name: jenkins defaults

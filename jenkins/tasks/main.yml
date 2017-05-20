@@ -1,2 +1,3 @@
 ---
-# tasks file for jenkins
+# TODO: install JDK
+- include: install.yml
