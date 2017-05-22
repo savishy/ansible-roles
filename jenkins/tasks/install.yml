@@ -10,10 +10,14 @@
     repo: deb http://pkg.jenkins.io/debian-stable binary/
     filename: "jenkins"
     state: present
+  become: true
 
 - name: jenkins installation
   package:
     name: jenkins
     state: latest
+  become: true
 
 - name: jenkins defaults
+  template: src=jenkins_defaults dest=/etc/default/jenkins
+  become: true
