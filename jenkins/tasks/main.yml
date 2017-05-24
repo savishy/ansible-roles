@@ -1,3 +1,5 @@
 ---
-# TODO: install JDK
-- include: install.yml
+- include: install_debian.yml
+  when: ansible_os_family == 'Debian'
+- include: install_centos.yml
+  when: ansible_os_family == 'Centos'
