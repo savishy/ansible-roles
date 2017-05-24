@@ -37,7 +37,7 @@
 - name: add Docker repository
   apt_repository:
     filename: docker
-    repo: "deb https://apt.dockerproject.org/repo ubuntu-trusty main"
+    repo: "deb https://apt.dockerproject.org/repo ubuntu-{{ansible_distribution_release}} main"
   when: ansible_distribution == 'Ubuntu'
   become: true
 
