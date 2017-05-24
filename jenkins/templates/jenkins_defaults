@@ -4,7 +4,7 @@
 NAME=jenkins
 
 # location of java
-JAVA=/opt/jdk1.8.0_112/bin/java
+JAVA={{jdk_home}}/bin/java
 
 # arguments to pass to java
 
@@ -59,7 +59,7 @@ MAXOPENFILES=8192
 # UMASK=027
 
 # port for HTTP connector (default 8080; disable with -1)
-HTTP_PORT=9095
+HTTP_PORT={{jenkins_port}}
 
 
 # servlet context, important if you want to use apache proxying
