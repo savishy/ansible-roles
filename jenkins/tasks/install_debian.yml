@@ -21,3 +21,7 @@
 - name: jenkins defaults
   template: src=jenkins_defaults dest=/etc/default/jenkins
   become: true
+
+- service:
+    name: jenkins
+    state: restarted
