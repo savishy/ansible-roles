@@ -1,3 +1,6 @@
 ---
 # defaults file for jenkins
 jenkins_http_port: 8081
+jenkins_user: "jenkins"
+jenkins_home: "/var/lib/{{jenkins_user}}"
+jenkins_java_opts: "-Djava.awt.headless=true -Dhudson.diyChunking=false -Djenkins.install.runSetupWizard=false"
