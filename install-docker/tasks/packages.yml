@@ -65,12 +65,15 @@
     creates: /usr/bin/pip
   become: true
 
-# install docker-py as it is needed by docker-image
+# install python modules needed by docker-image
 - name: install docker-py
   pip:
-    name: docker-py
+    name: "{{item}}"
     state: present
   become: true
+  with_items:
+    - six
+    - docker-py
 
 # install docker-compose as it is needed by docker-image
 # install 1.9.0 as per bug below:
