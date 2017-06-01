@@ -1,8 +1,11 @@
 ---
-# wait until Jenkins has started
+# wait until Jenkins has started. Useful in cases such as
+# - downloading Jenkins CLI
+# - hitting Jenkins CLI endpoints
+# Ref:
 # http://stackoverflow.com/a/23957310/682912
 
-- name: Wait untils Jenkins web API is available
+- name: Wait until Jenkins web API is available
   shell: curl --head --silent http://{{ container_ip }}:{{ jenkins_http_port }}/cli/
   register: result
   until: result.stdout.find("200 OK") != -1
