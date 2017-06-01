@@ -6,8 +6,8 @@
 # http://stackoverflow.com/a/23957310/682912
 
 - name: Wait until Jenkins web API is available
-  shell: curl --head --silent http://{{ container_ip }}:{{ jenkins_http_port }}/cli/
+  shell: curl -L --head --silent http://{{ container_ip }}:{{ jenkins_http_port }}/cli/
   register: result
-  until: result.stdout.find("200 OK") != -1
+  until: (result.stdout.find("200 OK") != -1) or (result.stdout.find("403 Forbidden") != -1)
   retries: 10
   delay: 10
