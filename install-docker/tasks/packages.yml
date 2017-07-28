@@ -28,10 +28,7 @@
 
 # add apt key for ubuntu
 - name: add Docker APT Key
-  apt_key:
-    keyserver: hkp://p80.pool.sks-keyservers.net:80
-    id: 58118E89F3A912897C070ADBF76221572C52609D
-  when: ansible_distribution == "Ubuntu"
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   become: true
 
 - name: add Docker repository
