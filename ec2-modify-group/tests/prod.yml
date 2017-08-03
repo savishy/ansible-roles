@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  remote_user: root
+  vars:
+    ec2_ports:
+     - {proto: tcp, from: 22, to: 22}
+     - {proto: tcp, from: 80, to: 80}
+     - {proto: tcp, from: 137, to: 137}
+     - {proto: tcp, from: 138, to: 138}
+     - {proto: tcp, from: 139, to: 139}
+     - {proto: tcp, from: 445, to: 445}
+     - {proto: tcp, from: 3389, to: 3389}
+     - {proto: tcp, from: 5985, to: 5985}
+     - {proto: tcp, from: 8080, to: 8080}
+     - {proto: tcp, from: 8081, to: 8081}
+
+
+  pre_tasks:
+    - include: ../../includes/get-ip-of-my-machine.yml
+  roles:
+    - {role: ec2-modify-group, ec2_group_name: "{{ec2_group_name_prod}}"}
