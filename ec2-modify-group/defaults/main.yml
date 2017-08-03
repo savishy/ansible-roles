@@ -1,11 +1,19 @@
 ---
-aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY') }}"
-aws_secret_key: "{{ lookup('env','AWS_SECRET_KEY') }}"
+aws_access_key: "{{ lookup('env','VAGRANT_AWS_ACCESS_KEY') }}"
+aws_secret_key: "{{ lookup('env','VAGRANT_AWS_SECRET_KEY') }}"
 host_ip: "{{ lookup('env','MY_IPADDR') }}"
-ec2_group_name: vish_agility_aws_test
-ec2_region: ap-south-1
+ec2_region: "{{ lookup('env','VAGRANT_AWS_REGION') }}"
 ec2_vpc_id: vpc-f4f2079d
 ec2_ports:
    - {proto: tcp, from: 80, to: 80}
    - {proto: tcp, from: 22, to: 22}
    - {proto: tcp, from: 8080, to: 8080}
+   - {proto: tcp, from: 8081, to: 8081}
+
+# ansible-managed ec2 security group for production use
+ec2_group_name_prod: "{{ lookup('env','VAGRANT_AWS_SECURITY_GROUP') }}"
+# ansible-managed ec2 security group for testing
+ec2_group_name_test: "vish_agility_aws_test"
+
+# default mode is to allow traffic only from your IP address.
+mode: "private"

@@ -18,7 +18,7 @@
   with_items: ec2_ports
   when: mode == "public"
 
-- name: modify ec2 rules to allow incoming traffic from security group
+- name: modify ec2 rules to allow incoming traffic from my ip address
   ec2_group:
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
@@ -31,6 +31,7 @@
       - proto: "{{ item.proto }}"
         from_port: "{{ item.from }}"
         to_port: "{{ item.to }}"
-        group_id: "{{ ec2_group_name }}"
-  with_items: ec2_ports
+        cidr_ip: "{{ my_ipaddr.stdout }}/32"
+  with_items:
+    - "{{ec2_ports}}"
   when: mode == "private"

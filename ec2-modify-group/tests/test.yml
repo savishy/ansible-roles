@@ -1,5 +1,7 @@
 ---
 - hosts: localhost
   remote_user: root
+  pre_tasks:
+    - include: ../../includes/get-ip-of-my-machine.yml
   roles:
-    - .
+    - {role: ec2-modify-group, ec2_group_name: "vish_agility_aws_test"}
