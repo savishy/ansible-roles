@@ -28,16 +28,15 @@
 
 # add apt key for ubuntu
 - name: add Docker APT Key
-  apt_key:
-    keyserver: hkp://p80.pool.sks-keyservers.net:80
-    id: 58118E89F3A912897C070ADBF76221572C52609D
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   when: ansible_distribution == "Ubuntu"
   become: true
 
-- name: add Docker repository
+# add docker ubuntu repo
+- name: add Docker Ubuntu repository
   apt_repository:
     filename: docker
-    repo: "deb https://apt.dockerproject.org/repo ubuntu-{{ansible_distribution_release}} main"
+    repo: "deb https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable"
   when: ansible_distribution == 'Ubuntu'
   become: true
 
@@ -49,7 +48,7 @@
   with_items:
     - curl
     - python
-    - docker-engine
+    - docker-ce
   become: true
 
 # install pip
