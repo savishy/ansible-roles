@@ -1,0 +1,8 @@
+---
+# install plugin via Jenkins Update Center with restart,
+# then wait for jenkins to be available again.
+# WARNING: This operation takes time.
+- name: install plugin {{plugin_to_install}} via CLI with restart
+  local_action: shell {{cli_cmd}} install-plugin {{plugin_to_install}} -restart {{cli_creds}}
+
+- include: ansible-roles/includes/wait-until-jenkins-is-available.yml
