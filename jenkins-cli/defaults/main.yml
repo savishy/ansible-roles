@@ -1,0 +1,9 @@
+---
+# http port for your jenkins installation
+jenkins_http_port: "8081"
+
+# local staging dir for jenkins CLI commands
+local_cli_dir: "/tmp/ansible/jenkins-cli"
+
+jenkins_user: "jenkins"
+jenkins_home: "/var/lib/{{jenkins_user}}"
