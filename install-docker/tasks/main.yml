@@ -21,7 +21,7 @@
 - name: push docker service settings for xenial
   block:
   - template:
-      source: daemon.json
+      src: daemon.json
       dest: /etc/docker/daemon.json
       mode: 0755
   - file:
