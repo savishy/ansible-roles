@@ -11,11 +11,28 @@
   when: ansible_distribution == 'CentOS'
   become: true
 
-- name: push docker service settings
+- name: push docker service settings for trusty
   template:
     src: default.docker
     dest: /etc/default/docker
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Ubuntu' && ansible_distribution_release == 'trusty'
+  become: true
+
+- name: push docker service settings for xenial
+  block:
+  - template:
+      source: daemon.json
+      dest: /etc/docker/daemon.json
+      mode: 0755
+  - file:
+      name: /etc/systemd/system/docker.service.d
+      state: directory
+      owner: root
+      mode: 0755
+  - template:
+      src: systemd.docker
+      dest: /etc/systemd/system/docker.service.d/docker.conf
+  when: ansible_distribution == 'Ubuntu' && ansible_distribution_release == 'xenial'
   become: true
 
 - name: create docker group
