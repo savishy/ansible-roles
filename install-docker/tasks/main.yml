@@ -15,7 +15,7 @@
   template:
     src: default.docker
     dest: /etc/default/docker
-  when: ansible_distribution == 'Ubuntu' && ansible_distribution_release == 'trusty'
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
   become: true
 
 - name: push docker service settings for xenial
@@ -32,7 +32,7 @@
   - template:
       src: systemd.docker
       dest: /etc/systemd/system/docker.service.d/docker.conf
-  when: ansible_distribution == 'Ubuntu' && ansible_distribution_release == 'xenial'
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
   become: true
 
 - name: create docker group
