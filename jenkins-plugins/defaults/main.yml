@@ -11,5 +11,6 @@ jenkins_plugins_list:
   - ssh-slaves
   - workflow-aggregator
   - docker-build-step
+  - copyartifact
 # local staging dir for jenkins CLI commands
 local_cli_dir: "/tmp/ansible/jenkins-cli"

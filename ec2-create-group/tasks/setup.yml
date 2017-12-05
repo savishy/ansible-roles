@@ -20,3 +20,8 @@
     state: present
   become: true
 
+- name: install boto3
+  pip:
+    name: boto3
+    state: present
+  become: true
