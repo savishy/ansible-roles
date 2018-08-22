@@ -36,12 +36,19 @@ vm_nsg_rules:
   access: Allow
   priority: 111
   direction: Inbound
+- name: 'HTTPS'
+  protocol: Tcp
+  source_address_prefix: '{{ansible_machine_ip}}/32'
+  destination_port_range: 443
+  access: Allow
+  priority: 121
+  direction: Inbound
 - name: 'HTTP_8080'
   protocol: Tcp
   source_address_prefix: '{{ansible_machine_ip}}/32'
   destination_port_range: 8080
   access: Allow
-  priority: 121
+  priority: 131
   direction: Inbound
 
 vm_username: azureuser
