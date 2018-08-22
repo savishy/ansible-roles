@@ -1,0 +1,54 @@
+rg_name: TestRG
+location: northeurope
+vm_name: TestVM
+vm_size: Standard_D2_v2
+vm_pubip_name: '{{vm_name}}-ip'
+vm_nic_name: '{{vm_name}}-nic'
+vm_ip_allocation: Static
+vm_vnet_name: '{{vm_name}}-vnet'
+vm_nsg_name: '{{vm_name}}-nsg'
+vm_subnet_name: '{{vm_name}}-subnet'
+vm_vnet_rg_name: '{{rg_name}}'
+vm_vnet_addr_prefix: '10.0.0.0/16'
+vm_subnet_addr_prefix: "10.0.1.0/24"
+
+vm_os_type: Linux
+vm_image:
+  publisher: Canonical
+  offer: UbuntuServer
+  sku: 16.04.0-LTS
+  version: latest
+
+vm_tags:
+  ansible_managed: "true"
+vm_nsg_rules:
+- name: 'SSH'
+  protocol: Tcp
+  source_address_prefix: '{{ansible_machine_ip}}/32'
+  destination_port_range: 22
+  access: Allow
+  priority: 101
+  direction: Inbound
+- name: 'HTTP_80'
+  protocol: Tcp
+  source_address_prefix: '{{ansible_machine_ip}}/32'
+  destination_port_range: 80
+  access: Allow
+  priority: 111
+  direction: Inbound
+- name: 'HTTP_8080'
+  protocol: Tcp
+  source_address_prefix: '{{ansible_machine_ip}}/32'
+  destination_port_range: 8080
+  access: Allow
+  priority: 121
+  direction: Inbound
+
+vm_username: azureuser
+vault_vm_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  32626638356563386164663538313862386431656664333265356166306466303636646436626134
+  3061373130313736636136373935346436376239626530340a653935303363613066366332626130
+  34303664383236663137363166633239336130626562633961323937643635643239653534323664
+  3031636533636138310a373466383534656631356362366536376666363365373338316464313864
+  3466
