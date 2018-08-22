@@ -1,0 +1,22 @@
+---
+- fail: msg="undefined variable vm_groups"
+  when: vm_groups is not defined
+
+- azure_rm_publicipaddress_facts:
+    name: '{{vm_pubip_name}}'
+    resource_group: '{{rg_name}}'
+  register: pubip_facts
+
+- debug: var=pubip_facts.ansible_facts.azure_publicipaddresses
+
+- fail: msg="One and only one IP address must be retrieved, something went wrong"
+  when: pubip_facts.ansible_facts.azure_publicipaddresses|length > 1
+
+- add_host:
+    ansible_host: '{{item.properties.ipAddress}}'
+    ansible_user: '{{vm_username}}'
+    ansible_password: '{{vault_vm_password}}'
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+    hostname: '{{vm_name}}'
+    groups: '{{vm_groups}}'
+  with_items: '{{pubip_facts.ansible_facts.azure_publicipaddresses}}'
