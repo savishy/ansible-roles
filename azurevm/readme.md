@@ -1,4 +1,15 @@
-Creates a Windows or Linux VM on Azure. 
+# Ansible Role - azurevm
+
+* Creates a Windows or Linux VM on Azure. 
+* Each VM gets a Public IP, NIC, NSG and Managed OS Disk on Azure. 
+
+**NSG Rules**: 
+
+The Ansible controller's IP is stored in a fact `ansible_controller_ip` if you wish to open NSG rules only from your Ansible controller machine. Look at the `defaults/main.yml` for an example.
+
+## How to use
+
+Read the top-level README file.
 
 ## Important Variables
 
