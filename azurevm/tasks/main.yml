@@ -73,17 +73,17 @@
 # Invoke-Expression -Command "(New-Object System.Net.WebClient).DownloadFile(`"https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1`",`"C:\remoting.ps1`")"; C\:\remoting.ps1 -Verbose -ForceNewSSLCert
 # this command needs to be encoded through Powershell for it to work with the Azure VM Extension.
 
-  - set_fact: 
-      configure_remoting_for_ansible: SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAALQBDAG8AbQBtAGEAbgBkACAAIgAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABTAHkAcwB0AGUAbQAuAE4AZQB0AC4AVwBlAGIAQwBsAGkAZQBuAHQAKQAuAEQAbwB3AG4AbABvAGEAZABGAGkAbABlACgAYAAiAGgAdAB0AHAAcwA6AC8ALwByAGEAdwAuAGcAaQB0AGgAdQBiAHUAcwBlAHIAYwBvAG4AdABlAG4AdAAuAGMAbwBtAC8AYQBuAHMAaQBiAGwAZQAvAGEAbgBzAGkAYgBsAGUALwBkAGUAdgBlAGwALwBlAHgAYQBtAHAAbABlAHMALwBzAGMAcgBpAHAAdABzAC8AQwBvAG4AZgBpAGcAdQByAGUAUgBlAG0AbwB0AGkAbgBnAEYAbwByAEEAbgBzAGkAYgBsAGUALgBwAHMAMQBgACIALABgACIAQwA6AFwAcgBlAG0AbwB0AGkAbgBnAC4AcABzADEAYAAiACkAIgA7ACAAQwA6AFwAcgBlAG0AbwB0AGkAbgBnAC4AcABzADEAIAAtAFYAZQByAGIAbwBzAGUAIAAtAEYAbwByAGMAZQBOAGUAdwBTAFMATABDAGUAcgB0AA==
+- set_fact: 
+    configure_remoting_for_ansible: SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAALQBDAG8AbQBtAGEAbgBkACAAIgAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABTAHkAcwB0AGUAbQAuAE4AZQB0AC4AVwBlAGIAQwBsAGkAZQBuAHQAKQAuAEQAbwB3AG4AbABvAGEAZABGAGkAbABlACgAYAAiAGgAdAB0AHAAcwA6AC8ALwByAGEAdwAuAGcAaQB0AGgAdQBiAHUAcwBlAHIAYwBvAG4AdABlAG4AdAAuAGMAbwBtAC8AYQBuAHMAaQBiAGwAZQAvAGEAbgBzAGkAYgBsAGUALwBkAGUAdgBlAGwALwBlAHgAYQBtAHAAbABlAHMALwBzAGMAcgBpAHAAdABzAC8AQwBvAG4AZgBpAGcAdQByAGUAUgBlAG0AbwB0AGkAbgBnAEYAbwByAEEAbgBzAGkAYgBsAGUALgBwAHMAMQBgACIALABgACIAQwA6AFwAcgBlAG0AbwB0AGkAbgBnAC4AcABzADEAYAAiACkAIgA7ACAAQwA6AFwAcgBlAG0AbwB0AGkAbgBnAC4AcABzADEAIAAtAFYAZQByAGIAbwBzAGUAIAAtAEYAbwByAGMAZQBOAGUAdwBTAFMATABDAGUAcgB0AA==
 
-  - name: For Windows VMs, set a VM Extension that enables Powershell Remoting
-    azure_rm_virtualmachine_extension:
-      name: ConfigurePSRemotingForAnsible
-      resource_group: "{{rg_name}}"
-      virtual_machine_name: "{{vm_name}}"
-      publisher: Microsoft.Compute
-      virtual_machine_extension_type: CustomScriptExtension
-      type_handler_version: 1.9
-      settings: '{"commandToExecute": "powershell.exe -ExecutionPolicy ByPass -EncodedCommand {{configure_remoting_for_ansible}}"}'
-      auto_upgrade_minor_version: true
-    when: "vm_os_type == 'Windows'"
+- name: For Windows VMs, set a VM Extension that enables Powershell Remoting
+  azure_rm_virtualmachine_extension:
+    name: ConfigurePSRemotingForAnsible
+    resource_group: "{{rg_name}}"
+    virtual_machine_name: "{{vm_name}}"
+    publisher: Microsoft.Compute
+    virtual_machine_extension_type: CustomScriptExtension
+    type_handler_version: 1.9
+    settings: '{"commandToExecute": "powershell.exe -ExecutionPolicy ByPass -EncodedCommand {{configure_remoting_for_ansible}}"}'
+    auto_upgrade_minor_version: true
+  when: "vm_os_type == 'Windows'"
