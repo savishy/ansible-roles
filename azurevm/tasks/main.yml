@@ -53,7 +53,7 @@
       public_ip_address_name: "{{vm_pubip_name}}"
     security_group_name: '{{vm_nsg_name}}'
 
-- Create VM
+- name: Create VM
   azure_rm_virtualmachine:
     resource_group: "{{rg_name}}"
     name: "{{vm_name}}"
