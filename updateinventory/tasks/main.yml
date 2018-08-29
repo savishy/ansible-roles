@@ -12,7 +12,8 @@
 - fail: msg="One and only one IP address must be retrieved, something went wrong"
   when: pubip_facts.ansible_facts.azure_publicipaddresses|length > 1
 
-- add_host:
+- name: Add a Linux host to in-memory inventory.
+  add_host:
     ansible_host: '{{item.properties.ipAddress}}'
     ansible_user: '{{vm_username}}'
     ansible_password: '{{vault_vm_password}}'
@@ -20,3 +21,16 @@
     hostname: '{{vm_name}}'
     groups: '{{vm_groups}}'
   with_items: '{{pubip_facts.ansible_facts.azure_publicipaddresses}}'
+  when: "vm_os_type == 'Linux'"
+
+- name: Add a Windows host to in-memory inventory.
+  add_host:
+    ansible_host: '{{item.properties.ipAddress}}'
+    ansible_user: '{{vm_username}}'
+    ansible_password: '{{vault_vm_password}}'
+    ansible_connection: winrm
+    ansible_winrm_server_cert_validation: ignore
+    hostname: '{{vm_name}}'
+    groups: '{{vm_groups}}'
+  with_items: '{{pubip_facts.ansible_facts.azure_publicipaddresses}}'
+  when: "vm_os_type == 'Windows'"
