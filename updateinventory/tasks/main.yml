@@ -30,6 +30,8 @@
     ansible_password: '{{vault_vm_password}}'
     ansible_connection: winrm
     ansible_winrm_server_cert_validation: ignore
+    ansible_winrm_operation_timeout_sec: 60
+    ansible_winrm_read_timeout_sec: 120
     hostname: '{{vm_name}}'
     groups: '{{vm_groups}}'
   with_items: '{{pubip_facts.ansible_facts.azure_publicipaddresses}}'
