@@ -41,4 +41,4 @@
     - proto: all
       from_port: 0-65535
       to_port: 0-65535
-      group_id: "ec2_group_details.group_id"
+      group_id: "{{ec2_group_details.group_id}}"
