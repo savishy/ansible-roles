@@ -1,0 +1,15 @@
+--- 
+# Prerequisites on localhost (Ansible Controller) to run Ansible Azure modules
+
+- block:
+  - name: ensure pip is installed
+    package:
+      name: python-pip
+      state: present
+  - name: ensure prerequisite pip packages
+    pip:
+      name: '{{item}}'
+      state: present
+    with_items:
+    - ansible[azure]
+  become: true
