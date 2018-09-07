@@ -12,4 +12,5 @@
       state: present
     with_items:
     - ansible[azure]
+    - pywinrm
   become: true
