@@ -4,7 +4,11 @@
 * Each VM gets a Public IP, NIC, NSG and Managed OS Disk on Azure. 
 * For Windows VMs, Remoting is enabled on SSL (port 5986). 
 
-**Vaulted Windows Password**
+**Linux by default**
+
+The OS created is Linux by default. 
+
+**Vaulted OS Password**
 
 The password is stored encrypted, in the role variables.
 Execute with `--ask-vault-pass` to enable the role to decrypt the password.
@@ -26,5 +30,7 @@ Look at [defaults/main.yml](defaults/main.yml) for all the variables that can be
 | `rg_name` | | Resource Group Name |
 | `location` | | Azure Location | 
 | `vm_pubip_name, vm_nic_name, vm_vnet_name, vm_nsg_name, vm_subnet_name` | | Naming Conventions for VM Resources |
-| `vm_image` | Dictionary | Offer, Publisher, SKU and Version of VM Image |
+| `vm_image` | Dictionary | Offer, Publisher, SKU and Version of VM Image. Set this to a Windows or Linux image as appropriate. |
 | `vm_nsg_rules` | List of Dictionaries | Rules to set in the NSG for the VM. |
+| `vm_os_type` | Change to "Windows" to enable Windows-specific tasks to run. |
+
