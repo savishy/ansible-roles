@@ -2,6 +2,12 @@
 
 * Creates a Windows or Linux VM on Azure. 
 * Each VM gets a Public IP, NIC, NSG and Managed OS Disk on Azure. 
+* For Windows VMs, Remoting is enabled on SSL (port 5986). 
+
+**Vaulted Windows Password**
+
+The password is stored encrypted, in the role variables.
+Execute with `--ask-vault-pass` to enable the role to decrypt the password.
 
 **NSG Rules**: 
 
