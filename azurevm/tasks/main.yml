@@ -1,4 +1,9 @@
 ---
+- name: Include task to validate prerequisites.
+  include_role:
+    name: ansible-roles/common
+    tasks_from: validate-azure-prereqs
+
 - name: Create RG
   azure_rm_resourcegroup:
     name: "{{rg_name}}"
