@@ -2,8 +2,10 @@
 - block:
   - apt_repository:
       repo: ppa:ansible/ansible
+  become: true
   when: ansible_distribution == 'Ubuntu'
 
 - package:
     name: ansible
     state: latest
+  become: true
