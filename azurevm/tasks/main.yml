@@ -92,7 +92,7 @@
     managed_disk_type: Standard_LRS
     ssh_public_keys:
     - path: /home/{{vm_username}}/.ssh/authorized_keys
-      key_data: "{{ lookup('file', ssh_key_path) }}"
+      key_data: "{{ lookup('file', ssh_pubkey_path) }}"
   when: "vm_os_type == 'Linux'"
   
 # Set a fact that contains the UTF 16 Base64 Encoded form of following command:
