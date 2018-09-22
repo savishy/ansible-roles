@@ -51,6 +51,7 @@ vm_nsg_rules:
   priority: 131
   direction: Inbound
 
+ssh_pubkey_path: /home/{{lookup('env','USER')}}/.ssh/id_rsa.pub
 vm_username: azureuser
 vault_vm_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
