@@ -1,6 +1,11 @@
 --- 
 # Prerequisites on localhost (Ansible Controller) to run Ansible Azure modules
 
+- name: Check if sudo exists (if you are on Azure cloud shell it may not exist)
+  shell: command -v sudo >/dev/null 2>&1
+  register: sudo_exists
+  ignore_errors: yes
+  
 - block:
   - name: ensure pip is installed
     package:
@@ -14,3 +19,4 @@
     - ansible[azure]
     - pywinrm
   become: true
+  when: sudo_exists is not failed
