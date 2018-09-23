@@ -1,0 +1,6 @@
+- name: Create subnets within the VNET.
+  azure_rm_subnet:
+    name: '{{item.key}}'
+    virtual_network_name: '{{azure_vnet_name}}'
+    resource_group: '{{azure_vnet_rg_name}}'
+    address_prefix_cidr: '{{item.value.cidr}}'

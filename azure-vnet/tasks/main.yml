@@ -1,0 +1,24 @@
+- include_role:
+    name: common
+    tasks_from: validate-azure-prereqs
+
+- name: Ensure VNET resource group exists.
+  azure_rm_resourcegroup:
+    name: '{{azure_vnet_rg_name}}'
+    location: '{{azure_vnet_location}}'
+    state: present
+
+- include_tasks: createvnet.yml
+
+- include_tasks: createsubnet.yml
+  with_dict: '{{azure_subnets_type1}}'
+  tags: subnet
+  when: "azure_vnet_type == 'type1'"
+
+- include_tasks: createsubnet.yml
+  with_dict: '{{azure_subnets_type2}}'
+  tags: subnet
+  when: "azure_vnet_type == 'type2'"
+
+- include_tasks: createvpngw.yml
+  when: azure_vnet_type == 'type2'

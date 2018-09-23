@@ -1,0 +1,23 @@
+---
+
+- name: Create VNET Gateway Public IP.
+  azure_rm_publicipaddress:
+    resource_group: '{{azure_vnet_rg_name}}'
+    name: '{{azure_vnet_name}}-gwip'
+    allocation_method: Dynamic
+    domain_name: thisisatest
+
+- name: Az Login.
+  shell: |
+    az login --service-principal -u {{lookup('env','AZURE_CLIENT_ID')}} \
+    -p {{lookup('env','AZURE_SECRET')}} \
+    --tenant {{lookup('env','AZURE_TENANT_ID')}}
+
+- name: Create VPN Gateway.
+  shell: |
+    az network vnet-gateway create --name {{azure_vnet_name}}-gw \
+    --public-ip-address {{azure_vnet_name}}-gwip \
+    --resource-group {{azure_vnet_rg_name}} \
+    --vnet {{azure_vnet_name}} \
+    --gateway-type Vpn --vpn-type RouteBased --sku Basic \
+    --location {{azure_vnet_location}}

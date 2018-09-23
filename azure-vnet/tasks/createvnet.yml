@@ -1,0 +1,10 @@
+---
+- name: Create an Azure VNET and store its ID.
+  azure_rm_virtualnetwork:
+    name: '{{azure_vnet_name}}'
+    resource_group: '{{azure_vnet_rg_name}}'
+    address_prefixes_cidr: '{{azure_vnet_block}}'
+    purge_address_prefixes: true
+    state: present
+  register: azure_vnet_output
+- set_fact: azure_vnet_id={{azure_vnet_output.state.id}}

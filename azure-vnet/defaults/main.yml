@@ -1,0 +1,24 @@
+azure_vnet_location: eastus
+azure_vnet_name: vnet0
+azure_vnet_rg_name: vnets
+
+# one vnet with 64 addresses.
+# allows upto 4 subnets with 16 each.
+azure_vnet_block: 10.10.0.0/26
+azure_subnet_block_1: 10.10.0.0/28
+azure_subnet_block_2: 10.10.0.16/28
+azure_subnet_block_3: 10.10.0.32/28
+azure_subnet_block_4: 10.10.0.48/28
+
+# Subnets for Type 1.
+azure_subnets_type1:
+  subnet0:
+    cidr: '{{azure_vnet_block}}'
+
+
+# Subnets for Type 1.
+azure_subnets_type2:
+  GatewaySubnet:
+    cidr: '{{azure_subnet_block_1}}'
+  subnet0:
+    cidr: '{{azure_subnet_block_2}}'
