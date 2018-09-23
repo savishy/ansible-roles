@@ -1,0 +1,14 @@
+- block:
+  - name: Ensure subnets exist within VPC.
+    ec2_vpc_subnet:
+      vpc_id: "{{ec2_vpc_id}}"
+      cidr: "{{item.value.cidr}}"
+      resource_tags:
+        Name: "{{item.key}}"
+    register: ec2_vpc_subnet_details
+
+  - name: create a dict with created subnet ids.
+    set_fact:
+      ec2_subnet_ids: "{{ ec2_subnet_ids|default({}) | combine({item.key: ec2_vpc_subnet_details.subnet.id}) }}"
+
+  tags: subnet

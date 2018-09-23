@@ -1,0 +1,46 @@
+---
+- block:
+  - name: Validate that the subnet exists.
+    ec2_vpc_subnet_facts:
+      subnet_ids: "{{vm_details.vpc_subnet_id}}"
+      region: "{{ec2_region}}"
+
+      # The SG was created for the purpose of the cluster traffic
+      # and does not allow outbound traffic nor SSH.
+
+  - name: create ec2 instances {{vm_name}}
+    ec2:
+      keypair: '{{vault_ec2_keypair_name}}'
+      region: "{{ec2_region}}"
+      instance_type: "{{vm_details.instance_type}}"
+      count: "{{vm_details.count}}"
+      group_id: "{{ec2_group_id}}"
+      image: "{{ec2_ami_id}}"
+      instance_tags: "{{vm_details.tags}}"
+      id: '{{client_tokens[vm_name]}}'
+      user_data: "{{user_data}}"
+      wait: yes
+      state: present
+      vpc_subnet_id: "{{vm_details.vpc_subnet_id}}"
+      assign_public_ip: '{{public_ip}}'
+    register: ec2_created_details
+
+  - name: wait for SSH to be available on instances. note that Python installation takes a few minutes.
+    delegate_to: '{{inst.public_dns_name}}'
+    wait_for_connection:
+      delay: 10
+      sleep: 30
+      timeout: 300
+    with_items: "{{ec2_created_details.instances}}"
+    loop_control:
+      loop_var: inst
+
+  - debug: var=ec2_created_details
+  - name: Add the instance to in-memory inventory.
+    add_host:
+      ansible_host: '{{ec2_created_details.instances[0].public_ip}}'
+      ansible_user: '{{ansible_user}}'
+      ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+      hostname: '{{vm_name}}'
+      groups: '{{ec2_instance_groups}}'
+  tags: instance

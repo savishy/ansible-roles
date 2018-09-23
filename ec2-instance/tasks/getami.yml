@@ -1,0 +1,13 @@
+---
+- block:
+    - name: get EC2 AMI ID
+      ec2_ami_facts:
+        owner: "{{ec2_ubuntu_owner}}"
+        region: "{{ec2_region}}"
+        filters:
+          architecture: x86_64
+          name: '{{ec2_ubuntu_ami_name}}'
+      register: ec2_ami_details
+    - set_fact: ec2_ami_id={{ec2_ami_details.images[0].image_id}}
+    - debug: var=ec2_ami_id
+  tags: ami

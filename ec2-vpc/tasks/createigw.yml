@@ -1,0 +1,11 @@
+---
+- block:
+  - name: Ensure Internet Gateway exists for VPC {{ec2_vpc_name}}.
+    ec2_vpc_igw:
+      vpc_id: '{{ec2_vpc_id}}'
+      state: present
+    register: ec2_vpc_igw_details
+
+  - name: Store IGW ID.
+    set_fact: ec2_vpc_igw_id={{ec2_vpc_igw_details.gateway_id}}
+  tags: igw,route

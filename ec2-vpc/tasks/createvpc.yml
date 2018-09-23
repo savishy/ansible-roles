@@ -1,0 +1,38 @@
+# Pre tasks to be performed for any VPC type.
+---
+- name: Check for undefined vars.
+  fail: msg="One or more variables are not defined"
+  when: ec2_vpc_type is not defined or ec2_vpc_name is not defined or ec2_vpc_block is not defined or ec2_region is not defined
+
+- name: Check whether VPC {{ec2_vpc_name}} exists.
+  ec2_vpc_net_facts:
+    filters:
+      'tag:Name': "{{ec2_vpc_name}}"
+  register: vpc_details
+  tags: subnet,igw,route
+
+- name: Store VPC ID for future use if it exists already.
+  set_fact:
+    ec2_vpc_id: "{{vpc_details.vpcs[0].id}}"
+  when: vpc_details.vpcs|length > 0
+  tags: subnet,igw,route
+
+- block:
+  - name: Create a VPC {{ec2_vpc_name}} if not found.
+    ec2_vpc_net:
+      name: "{{ec2_vpc_name}}"
+      cidr_block: "{{ec2_vpc_block}}"
+      region: "{{ec2_region}}"
+      tags:
+        Name: "{{ec2_vpc_name}}"
+        ansible_managed: true
+      tenancy: default
+    register: vpc_created_details
+
+  - name: Store VPC ID for future use.
+    set_fact:
+      ec2_vpc_id: "{{vpc_created_details.vpc.id}}"
+
+  when: vpc_details.vpcs|length == 0
+
+- debug: msg="Created VPC with ID {{ec2_vpc_id}}"

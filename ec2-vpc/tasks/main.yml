@@ -1,0 +1,20 @@
+- include_role:
+    name: common
+    tasks_from: validate-aws-prereqs
+- include_tasks: createvpc.yml
+  tags: subnet,igw,route
+- include_tasks: createsg.yml
+
+- name: Create or retrieve subnet details.
+  include_tasks: createsubnets.yml
+  with_dict: '{{ec2_subnets_type1}}'
+  tags: subnet
+  when: "ec2_vpc_type == 'type1'"
+
+- name: Create or retrieve IGW Details.
+  include_tasks: createigw.yml
+  tags: igw,route
+
+- name: Create or retrieve Route Table details.
+  include_tasks: createroutetable.yml
+  tags: route

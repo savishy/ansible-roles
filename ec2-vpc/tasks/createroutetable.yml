@@ -1,0 +1,24 @@
+---
+- block:
+  - name: Get details of default route table created with VPC.
+    ec2_vpc_route_table_facts:
+      filters:
+        vpc_id: '{{ec2_vpc_id}}'
+      region: '{{ec2_region}}'
+    register: ec2_vpc_route_details
+
+  - name: Store route table ID.
+    set_fact: ec2_vpc_route_table_id={{ec2_vpc_route_details.route_tables[0].id}}
+
+  # lookup: id ensures that the main route table is updated instead of creating new RT.
+  # https://stackoverflow.com/a/45472581/682912
+  - name: Create route table rules to create a public subnet.
+    ec2_vpc_route_table:
+      route_table_id: '{{ec2_vpc_route_table_id}}'
+      lookup: id
+      vpc_id: '{{ec2_vpc_id}}'
+      region: '{{ec2_region}}'
+      routes:
+      - dest: 0.0.0.0/0
+        gateway_id: '{{ec2_vpc_igw_id}}'
+  tags: route

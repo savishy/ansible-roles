@@ -1,0 +1,26 @@
+---
+
+# This task file creates public DNS records in a public hosted zone in Route 53.
+# Ref: https://docs.ansible.com/ansible/2.6/modules/route53_module.html
+#
+# r53_record_type: e.g "A", "CNAME".
+# "A" records are created by default.
+#
+# r53_zone_name: the Route 53 zone to use (e.g devopsyness.com). Will create if absent.
+#
+# r53_record_prefix: The prefix to attach to the zone (e.g foo).
+#     This means you want to create a record "foo.devopsyness.com".
+
+- name: Ensure that an AWS Route53 zone exists.
+  route53_zone:
+    zone: '{{r53_zone_name}}'
+    comment: Ansible-Managed Route53 Zone
+
+- name: Create DNS A-Record in Route53 zone.
+  route53:
+    state: present
+    zone: '{{r53_zone_name}}'
+    record: '{{r53_record_prefix}}.{{r53_zone_name}}'
+    type: '{{ r53_record_type | default("A") }}'
+    value:
+    - 10.111.40.11

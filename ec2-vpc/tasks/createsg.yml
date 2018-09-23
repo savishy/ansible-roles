@@ -1,0 +1,22 @@
+---
+
+- name: Create a SG associated with VPC {{ec2_vpc_name}} without any rules.
+  ec2_group:
+    name: '{{ec2_group_name}}'
+    description: 'ansible_managed security group for {{ec2_vpc_name}} VPC'
+    region: '{{ec2_region}}'
+    vpc_id: '{{ec2_vpc_id}}'
+    rules: []
+    rules_egress: []
+  register: ec2_group_details
+
+- name: Store EC2 Group ID.
+  set_fact: ec2_group_id={{ec2_group_details.group_id}}
+
+- name: Create rules for EC2 Group.
+  ec2_group:
+    name: '{{ec2_group_name}}'
+    description: 'ansible_managed security group for {{ec2_vpc_name}} VPC'
+    rules: '{{ec2_sg_rules_ingress}}'
+    region: '{{ec2_region}}'
+    rules_egress: '{{ec2_sg_rules_egress}}'

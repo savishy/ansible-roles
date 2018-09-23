@@ -1,0 +1,29 @@
+---
+# Variables that are not mandatory.
+
+# Your IP.
+
+my_ip: "{{ lookup('url','http://ipinfo.io/ip') }}"
+
+# Name of SG is prefixed with VPC Name by default.
+ec2_group_name: '{{ec2_vpc_name}}-sg'
+
+# Ingress rules for SG. By default
+# - SSH is allowed from your IP.
+# - All Communication is allowed internal to the SG.
+
+ec2_sg_rules_ingress:
+- proto: Tcp
+  from_port: 22
+  to_port: 22
+  cidr_ip: '{{my_ip}}/32'
+  rule_desc: "Allow SSH from your IP"
+- proto: all
+  group_id: '{{ec2_group_id}}'
+# No outbound SG Rules are defined by default (i.e. open SG for outbound connection)
+ec2_sg_rules_egress: []
+
+# EC2 Subnets for Type 1.
+ec2_subnets_type1:
+  subnet0:
+    cidr: '{{ec2_vpc_block}}'

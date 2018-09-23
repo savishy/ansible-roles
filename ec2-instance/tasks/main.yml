@@ -1,0 +1,9 @@
+---
+
+- include_tasks: getami.yml
+- include_tasks: createinstance.yml vm_name={{item.key}} vm_details={{item.value}}
+  with_dict: "{{vms}}"
+  tags: instance
+
+# - name: Retrieve the IP for MySQL instance.
+#   set_fact: mysql_db_host={{ec2_created_details.instances[0].public_ip}}

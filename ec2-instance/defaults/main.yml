@@ -1,0 +1,16 @@
+# Canonical Ubuntu 16.04 Server. Details retrieved from AWS Console.
+ec2_ubuntu_owner: 099720109477
+ec2_ubuntu_ami_name: 'ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20180814'
+
+# TODO this is for a future implementation where instances
+# are created without public IPs.
+# Create instances with Public IP.
+public_ip: false
+
+# Instance does not come with python and pip installed, required for ansible.
+# User data executes at instance creation and installs python.
+user_data: |
+  #!/bin/bash
+  apt-get update -qqy
+  apt-get install -qy python-minimal
+  apt-get install -qy python-pip
