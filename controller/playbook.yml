@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  connection: local
+  vars:
+    use_azure: true
+    vm_groups:
+    - controller
+  roles:
+  - ansible-roles/azurevm
+  - ansible-roles/updateinventory
+
+- hosts: controller
+  roles:
+  - ansible-role-ansiblecontroller

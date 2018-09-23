@@ -2,7 +2,7 @@
 - fail: msg="undefined variable vm_groups"
   when: vm_groups is not defined
 
-- fail: msg="variable use_azure is not defined, please set it to true."
+- fail: msg="variable use_azure is not defined, please set it to true to use Azure."
   when: use_azure is not defined
 
 - block:
@@ -17,7 +17,8 @@
   - fail: msg="One and only one IP address must be retrieved, something went wrong"
     when: pubip_facts.ansible_facts.azure_publicipaddresses|length > 1
   when: use_azure
-- name: Add a Linux host to in-memory inventory.
+
+- name: Add a Linux host to in-memory inventory using password authentication.
   add_host:
     ansible_host: '{{item.properties.ipAddress}}'
     ansible_user: '{{vm_username}}'
@@ -26,7 +27,18 @@
     hostname: '{{vm_name}}'
     groups: '{{vm_groups}}'
   with_items: '{{pubip_facts.ansible_facts.azure_publicipaddresses}}'
-  when: "vm_os_type == 'Linux'"
+  when: "vm_os_type == 'Linux' and not use_sshkey_auth"
+
+- name: Add a Linux host to in-memory inventory using SSH Key authentication.
+  add_host:
+    ansible_host: '{{item.properties.ipAddress}}'
+    ansible_user: '{{vm_username}}'
+    ansible_ssh_private_key_file: '{{ssh_key_path}}'
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+    hostname: '{{vm_name}}'
+    groups: '{{vm_groups}}'
+  with_items: '{{pubip_facts.ansible_facts.azure_publicipaddresses}}'
+  when: "vm_os_type == 'Linux' and use_sshkey_auth"
 
 - name: Add a Windows host to in-memory inventory.
   add_host:

@@ -58,7 +58,7 @@
       public_ip_address_name: "{{vm_pubip_name}}"
     security_group_name: '{{vm_nsg_name}}'
 
-- name: Create VM
+- name: Create VM of type Windows
   azure_rm_virtualmachine:
     resource_group: "{{rg_name}}"
     name: "{{vm_name}}"
@@ -73,7 +73,28 @@
     image: "{{vm_image}}"
     tags: "{{vm_tags}}"
     managed_disk_type: Standard_LRS
+  when: "vm_os_type != 'Linux'"
 
+- name: Create VM of type Linux
+  azure_rm_virtualmachine:
+    resource_group: "{{rg_name}}"
+    name: "{{vm_name}}"
+    vm_size: "{{vm_size}}"
+    admin_username: "{{vm_username}}"
+    admin_password: "{{vault_vm_password}}"
+    os_type: "{{vm_os_type}}"
+    network_interfaces: "{{vm_nic_name}}"
+    subnet_name: "{{vm_subnet_name}}"
+    virtual_network_resource_group: "{{vm_vnet_rg_name}}"
+    virtual_network_name: "{{vm_vnet_name}}"
+    image: "{{vm_image}}"
+    tags: "{{vm_tags}}"
+    managed_disk_type: Standard_LRS
+    ssh_public_keys:
+    - path: /home/{{vm_username}}/.ssh/authorized_keys
+      key_data: "{{ lookup('file', ssh_pubkey_path) }}"
+  when: "vm_os_type == 'Linux'"
+  
 # Set a fact that contains the UTF 16 Base64 Encoded form of following command:
 # Invoke-Expression -Command "(New-Object System.Net.WebClient).DownloadFile(`"https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1`",`"C:\remoting.ps1`")"; C\:\remoting.ps1 -Verbose -ForceNewSSLCert
 # this command needs to be encoded through Powershell for it to work with the Azure VM Extension.
