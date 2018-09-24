@@ -7,6 +7,11 @@
     allocation_method: Dynamic
     domain_name: thisisatest
 
+- name: Include tasks to install Azure CLI.
+  include_role:
+    name: common
+    tasks_from: install-azure-cli
+ 
 - name: Az Login.
   shell: |
     az login --service-principal -u {{lookup('env','AZURE_CLIENT_ID')}} \
