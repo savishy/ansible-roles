@@ -49,6 +49,7 @@
     - python-pip
     - docker-ce
   become: true
+  notify: restart docker
 
 - name: install docker-py
   pip:

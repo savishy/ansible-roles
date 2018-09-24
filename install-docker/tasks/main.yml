@@ -34,6 +34,7 @@
       dest: /etc/systemd/system/docker.service.d/docker.conf
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
   become: true
+  notify: restart docker
 
 - name: create docker group
   group:
@@ -46,8 +47,8 @@
     groups: docker
   become: true
 
-- name: start/restart docker service
+- name: start docker service
   service:
     name: docker
-    state: restarted
+    state: started
   become: true
