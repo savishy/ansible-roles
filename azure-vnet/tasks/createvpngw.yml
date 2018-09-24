@@ -3,7 +3,7 @@
 - name: Create VNET Gateway Public IP.
   azure_rm_publicipaddress:
     resource_group: '{{azure_vnet_rg_name}}'
-    name: '{{azure_vnet_name}}-gwip'
+    name: '{{azure_vpngwip_name}}'
     allocation_method: Dynamic
     domain_name: thisisatest
 
@@ -18,11 +18,17 @@
     -p {{lookup('env','AZURE_SECRET')}} \
     --tenant {{lookup('env','AZURE_TENANT_ID')}}
 
+- name: Check if VPN Gateway exists.
+  shell: az network vnet-gateway show --name {{azure_vpngw_name}} -g {{azure_vnet_rg_name}}
+  changed_when: false
+  register: az_vpngw_exists
+
 - name: Create VPN Gateway.
-  shell: |
-    az network vnet-gateway create --name {{azure_vnet_name}}-gw \
-    --public-ip-address {{azure_vnet_name}}-gwip \
+  shell: |    
+    az network vnet-gateway create --name {{azure_vpngw_name}} \
+    --public-ip-address {{azure_vpngwip_name}} \
     --resource-group {{azure_vnet_rg_name}} \
     --vnet {{azure_vnet_name}} \
     --gateway-type Vpn --vpn-type RouteBased --sku Basic \
     --location {{azure_vnet_location}}
+  when: azure_vpngw_name not in az_vpngw_exists.stdout
