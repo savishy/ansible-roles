@@ -1,17 +1,31 @@
+# RG where the VM goes.
 rg_name: TestRG
-location: northeurope
+location: eastus
+
+# VM Details.
 vm_name: TestVM
 vm_size: Standard_D2_v2
+
+# Naming Conventions for related resources.
 vm_pubip_name: '{{vm_name}}-ip'
 vm_nic_name: '{{vm_name}}-nic'
-vm_ip_allocation: Static
 vm_vnet_name: '{{vm_name}}-vnet'
 vm_nsg_name: '{{vm_name}}-nsg'
 vm_subnet_name: '{{vm_name}}-subnet'
+
+# IP and Network Details.
+vm_ip_allocation: Static
+
+# Allow VNETs to be stored in a different RG.
 vm_vnet_rg_name: '{{rg_name}}'
+
 vm_vnet_addr_prefix: '10.0.0.0/16'
 vm_subnet_addr_prefix: "10.0.1.0/24"
 
+# Create VMs with public IP or not?
+create_vms_with_public_ip: true
+
+# VM Image.
 vm_os_type: Linux
 vm_image:
   publisher: Canonical
@@ -19,8 +33,11 @@ vm_image:
   sku: 16.04.0-LTS
   version: latest
 
+# VM Tags.
 vm_tags:
   ansible_managed: "true"
+  
+# NSG Rules for VM.
 vm_nsg_rules:
 - name: 'SSH'
   protocol: Tcp
@@ -51,6 +68,7 @@ vm_nsg_rules:
   priority: 131
   direction: Inbound
 
+# Connection Details.
 ssh_pubkey_path: /home/{{lookup('env','USER')}}/.ssh/id_rsa.pub
 vm_username: azureuser
 vault_vm_password: !vault |
