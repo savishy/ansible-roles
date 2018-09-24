@@ -5,13 +5,13 @@
   register: az_cli_installed
 
 - block:
-  - name: Add repository for azure cli.
-    apt_repository:
-      repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ansible_distribution_release}} main
-      state: present
   - name: Add an Apt signing key for Azure CLI.
     apt_key:
       url: https://packages.microsoft.com/keys/microsoft.asc
+      state: present
+  - name: Add repository for Azure cli.
+    apt_repository:
+      repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ansible_distribution_release}} main
       state: present
   - name: Install Azure CLI.
     package:
