@@ -1,6 +1,6 @@
 ---
 - name: Check if Azure CLI is installed.
-  shell: command -v az
+  shell: command -v az >/dev/null 2>&1
   ignore_errors: true
   register: az_cli_installed
 
@@ -21,3 +21,4 @@
     - apt-transport-https
     - azure-cli
   when: az_cli_installed is failed
+  become: true
