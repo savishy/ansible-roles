@@ -5,6 +5,8 @@
     use_azure: true
     vm_groups:
     - controller
+    use_sshkey_auth: true
+    ssh_key_path: ~/.ssh/id_rsa
     rg_name: controller
     vm_name: controller
     location: eastus
