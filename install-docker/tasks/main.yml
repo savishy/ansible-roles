@@ -32,9 +32,10 @@
   - template:
       src: systemd.docker
       dest: /etc/systemd/system/docker.service.d/docker.conf
+    notify: restart docker
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
   become: true
-  notify: restart docker
+
 
 - name: create docker group
   group:
