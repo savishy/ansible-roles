@@ -30,5 +30,6 @@
     --resource-group {{azure_vnet_rg_name}} \
     --vnet {{azure_vnet_name}} \
     --gateway-type Vpn --vpn-type RouteBased --sku Basic \
+    --address-prefixes {{azure_vpngw_client_address_prefixes}} \
     --location {{azure_vnet_location}}
   when: azure_vpngw_name not in az_vpngw_exists.stdout
