@@ -1,6 +1,7 @@
 azure_vnet_location: eastus
 azure_vnet_name: vnet0
 azure_vpngw_name: '{{azure_vnet_name}}-gw'
+azure_vpngwip_name: '{{azure_vnet_name}}-gwip'
 azure_vnet_rg_name: vnets
 
 # one vnet with 64 addresses.
