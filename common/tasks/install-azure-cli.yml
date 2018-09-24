@@ -9,16 +9,14 @@
     apt_key:
       url: https://packages.microsoft.com/keys/microsoft.asc
       state: present
-  - name: Add repository for Azure cli.
+  - name: Add repository for Azure CLI.
     apt_repository:
       repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ansible_distribution_release}} main
       state: present
   - name: Install Azure CLI.
-    package:
-      name: '{{item}}'
+    apt:
+      update_cache: yes
+      name: azure-cli
       state: present
-    with_items:
-    - apt-transport-https
-    - azure-cli
   when: az_cli_installed is failed and ansible_distribution == 'Ubuntu'
   become: true
