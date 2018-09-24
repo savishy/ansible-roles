@@ -1,11 +1,19 @@
 ---
 - block:
-  - apt_repository:
+  - name: Add Ansible Repository.
+    apt_repository:
       repo: ppa:ansible/ansible
   become: true
   when: ansible_distribution == 'Ubuntu'
 
-- package:
+- name: Ensure latest ansible.
+  package:
     name: ansible
     state: latest
   become: true
+
+- name: Enable color terminal in bashrc.
+  replace:
+    path: /home/{{ansible_user}}/.bashrc
+    regexp: '#force_color_prompt=yes'
+    replace: 'force_color_prompt=yes'
