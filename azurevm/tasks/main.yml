@@ -28,13 +28,14 @@
     virtual_network: "{{vm_vnet_name}}"
     state: present
 
-- name: Create Pub IP
+- name: Create Public IP for the VM.
   azure_rm_publicipaddress:
     resource_group: "{{rg_name}}"
     name: "{{vm_pubip_name}}"
     allocation_method: '{{vm_ip_allocation}}'
+  when: create_vms_with_public_ip
 
-- name: get your IP
+- name: Get your machine's IP for NSG Rules.
   uri:
     url: http://ipinfo.io/ip
     return_content: yes
@@ -45,7 +46,7 @@
 - debug:
     msg: "Your IP: {{ansible_machine_ip}}"
 
-- name: Create NSG
+- name: Create NSG.
   azure_rm_securitygroup:
     resource_group: '{{rg_name}}'
     name: '{{vm_nsg_name}}'
@@ -59,12 +60,29 @@
   azure_rm_networkinterface:
     resource_group: "{{rg_name}}"
     name: "{{vm_nic_name}}"
-    virtual_network: "{{az_vnet_id}}"
+    virtual_network: 
+      name: '{{vm_vnet_name}}'
+      resource_group: '{{vm_vnet_rg_name}}'
     subnet: "{{vm_subnet_name}}"
     ip_configurations:
     - name: '{{vm_pubip_name}}'
       public_ip_address_name: "{{vm_pubip_name}}"
     security_group_name: '{{vm_nsg_name}}'
+  when: create_vms_with_public_ip
+
+- name: Create NIC WITHOUT Public IP and reference the VNET ID retrieved earlier.
+  azure_rm_networkinterface:
+    resource_group: "{{rg_name}}"
+    name: "{{vm_nic_name}}"
+    virtual_network: 
+      name: '{{vm_vnet_name}}'
+      resource_group: '{{vm_vnet_rg_name}}'
+    subnet: "{{vm_subnet_name}}"
+    ip_configurations:
+    - name: '{{vm_name}}-privip'
+      private_ip_allocation_method: Dynamic
+    security_group_name: '{{vm_nsg_name}}'
+  when: not create_vms_with_public_ip
 
 - name: Create VM of type Windows
   azure_rm_virtualmachine:
