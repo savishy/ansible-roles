@@ -17,4 +17,4 @@
 
 - hosts: controller
   roles:
-  - ansible-role-ansiblecontroller
+  - ansible-roles/controller
