@@ -4,17 +4,6 @@
   fail: "{{ ansible_distribution }} is unsupported. Only CentOS and Ubuntu supported."
   when: ansible_distribution != 'Ubuntu' and ansible_distribution != 'CentOS'
 
-# Install packages specific for ubuntu
-- name: install prerequisite packages for Ubuntu
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - apt-transport-https
-    - ca-certificates
-  when: ansible_distribution == "Ubuntu"
-  become: true
-
 # add Docker repo to get the latest docker
 - name: add Docker repository for CentOS
   yum_repository:
@@ -27,15 +16,24 @@
   become: true
 
 - block:
+
+  - name: install prerequisite packages for Ubuntu
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - apt-transport-https
+      - ca-certificates
+
   - name: add Docker APT Key
     apt_key: 
       url: https://download.docker.com/linux/ubuntu/gpg
       state: present
 
-    - name: add Docker Ubuntu repository
-      apt_repository:
-        filename: docker
-        repo: "deb https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable"
+  - name: add Docker Ubuntu repository
+    apt_repository:
+      filename: docker
+      repo: "deb https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable"
 
   when: ansible_distribution == "Ubuntu"
   become: true
