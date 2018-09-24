@@ -1,0 +1,85 @@
+# Mostly ansiblized from
+# https://hub.docker.com/r/mysql/mysql-cluster/
+
+- name: Create Docker Network.
+  docker_network:
+    name: mysqlha
+    ipam_options:
+      subnet: '{{mysqlha_subnet}}'
+
+- name: Create local dir to store mysql cluster config.
+  file:
+    name: /opt/mysqlha-cluster-data
+    state: directory
+    owner: "{{ lookup('env','USER') }}"
+    mode: 0755
+  become: true
+
+- name: template out mysql-cluster config.
+  template:
+    src: '{{item}}'
+    dest: /opt/mysqlha-cluster-data/{{item}}
+  with_items:
+  - mysql-cluster.cnf
+  - my.cnf
+
+- name: Create Management Node.
+  docker_container:
+    name: '{{mysqlha_mgmt_hostname}}'
+    image: mysql/mysql-cluster
+    volumes:
+    - /opt/mysqlha-cluster-data/mysql-cluster.cnf:/etc/mysql-cluster.cnf
+    networks:
+    - name: mysqlha
+      ipv4_address: '{{mysqlha_mgmt_ip}}'
+    command: ["ndb_mgmd"]
+
+- name: Create data node ndb1.
+  docker_container:
+    name: mysqlha_ndb1
+    image: mysql/mysql-cluster
+    volumes:
+    - /opt/mysqlha-cluster-data/my.cnf:/etc/my.cnf
+    networks:
+    - name: mysqlha
+      ipv4_address: '{{mysqlha_ndb1_ip}}'
+    command: ndbd
+
+- name: Create data node ndb2.
+  docker_container:
+    name: mysqlha_ndb2
+    image: mysql/mysql-cluster
+    volumes:
+    - /opt/mysqlha-cluster-data/my.cnf:/etc/my.cnf
+    networks:
+    - name: mysqlha
+      ipv4_address: '{{mysqlha_ndb2_ip}}'
+    command: ndbd
+
+- name: Create MySQL Server Node.
+  docker_container:
+    name: mysqlha_mysql1
+    image: mysql/mysql-cluster
+    volumes:
+    - /opt/mysqlha-cluster-data/my.cnf:/etc/my.cnf
+    networks:
+    - name: mysqlha
+      ipv4_address: '{{mysqlha_mysql1_ip}}'
+    env:
+      MYSQL_ROOT_PASSWORD: '{{vault_mysql_root_pass}}'
+    command: mysqld
+
+# docker run -it --net=cluster mysql/mysql-cluster ndb_mgm
+
+- name: Create MySQL Management Client.
+  docker_container:
+    name: mysqlha_mgmt_client
+    image: mysql/mysql-cluster
+    volumes:
+    - /opt/mysqlha-cluster-data/my.cnf:/etc/my.cnf
+    networks:
+    - name: mysqlha
+      ipv4_address: '{{mysqlha_mgmt_client_ip}}'
+    interactive: true
+    tty: true
+    command: ndb_mgm
