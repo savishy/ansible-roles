@@ -26,45 +26,32 @@
   when: ansible_distribution == "CentOS"
   become: true
 
-# add apt key for ubuntu
-- name: add Docker APT Key
-  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+- block:
+  - name: add Docker APT Key
+    apt_key: 
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+    - name: add Docker Ubuntu repository
+      apt_repository:
+        filename: docker
+        repo: "deb https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable"
+
   when: ansible_distribution == "Ubuntu"
   become: true
 
-# add docker ubuntu repo
-- name: add Docker Ubuntu repository
-  apt_repository:
-    filename: docker
-    repo: "deb https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable"
-  when: ansible_distribution == 'Ubuntu'
-  become: true
-
 # install required packages
-- name: install packages
+- name: install packages including Docker.
   package:
     name: "{{ item }}"
     state: latest
   with_items:
     - curl
     - python
+    - python-pip
     - docker-ce
   become: true
 
-# install pip
-- name: get pip install script
-  get_url:
-    url: "https://bootstrap.pypa.io/get-pip.py"
-    dest: "/tmp/get-pip.py"
-
-- name: run pip install script
-  command: python get-pip.py
-  args:
-    chdir: "/tmp"
-    creates: /usr/bin/pip
-  become: true
-
-# install python modules needed by docker-image
 - name: install docker-py
   pip:
     name: "{{item}}"
@@ -81,5 +68,4 @@
   pip:
     name: docker-compose
     state: present
-    version: 1.9.0
   become: true

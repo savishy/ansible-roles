@@ -40,8 +40,7 @@
     name: docker
   become: true
 
-- name: add ec2 user to docker group
-  # command: usermod -a -G docker ec2-user
+- name: Create a Docker user and add that to docker group to be able to run docker containers without sudo.
   user:
     name: "{{ docker_user }}"
     groups: docker
