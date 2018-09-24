@@ -1,0 +1,23 @@
+---
+- name: Check if Azure CLI is installed.
+  shell: command -v az
+  ignore_errors: true
+  register: az_cli_installed
+
+- block:
+  - name: Add repository for azure cli.
+    apt_repository:
+      repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ansible_distribution}} main
+      state: present
+  - name: Add an Apt signing key for Azure CLI.
+    apt_key:
+      url: https://packages.microsoft.com/keys/microsoft.asc
+      state: present
+  - name: Install Azure CLI.
+    package:
+      name: '{{item}}'
+      state: present
+    with_items:
+    - apt-transport-https
+    - azure-cli
+  when: az_cli_installed is failed
