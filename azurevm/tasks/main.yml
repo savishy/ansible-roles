@@ -10,12 +10,16 @@
     location: "{{location}}"
     state: present
 
-- name: Create VNET
+- name: Create VNET or retrieve VNET Details.
   azure_rm_virtualnetwork:
     resource_group: "{{vm_vnet_rg_name}}"
     name: "{{vm_vnet_name}}"
     address_prefixes: "{{vm_vnet_addr_prefix}}"
-
+  register: az_vnet_details
+  
+- name: Store VNET ID.
+  set_fact: az_vnet_id={{az_vnet_details.id}}
+  
 - name: Add Subnets to VNET
   azure_rm_subnet:
     resource_group: "{{vm_vnet_rg_name}}"
@@ -47,11 +51,15 @@
     name: '{{vm_nsg_name}}'
     purge_rules: yes
     rules: '{{vm_nsg_rules}}'
-- name: Create NIC with Public IP
+
+# VNET ID is needed if creating an NIC which uses a VNET in a different RG.
+# https://github.com/ansible/ansible/issues/29607
+
+- name: Create NIC with Public IP and reference the VNET ID retrieved earlier.
   azure_rm_networkinterface:
     resource_group: "{{rg_name}}"
     name: "{{vm_nic_name}}"
-    virtual_network: "{{vm_vnet_name}}"
+    virtual_network: "{{az_vnet_id}}"
     subnet: "{{vm_subnet_name}}"
     ip_configurations:
     - name: '{{vm_pubip_name}}'
