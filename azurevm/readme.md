@@ -1,8 +1,12 @@
 # Ansible Role - azurevm
 
-* Creates a Windows or Linux VM on Azure. 
+* Creates a Windows or Linux VM on Azure, mapped to an _existing_ VNET.
 * Each VM gets a Public IP, NIC, NSG and Managed OS Disk on Azure. 
 * For Windows VMs, Remoting is enabled on SSL (port 5986). 
+
+**Does not create VNETs.**
+
+Use the `azure-vnet` role to do that.
 
 **Linux by default**
 
