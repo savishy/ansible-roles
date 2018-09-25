@@ -10,11 +10,10 @@
     location: "{{location}}"
     state: present
 
-- name: Create VNET or check that VNET exists.
-  azure_rm_virtualnetwork:
+- name: Get an existing VNET.
+  azure_rm_virtualnetwork_facts:
     resource_group: "{{vm_vnet_rg_name}}"
     name: "{{vm_vnet_name}}"
-    address_prefixes: "{{vm_vnet_addr_prefix}}"
   
 - name: Add Subnets to VNET
   azure_rm_subnet:
