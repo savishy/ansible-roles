@@ -51,6 +51,13 @@
   become: true
   notify: restart docker
 
+ - name: Upgrade Pip 
+  pip:
+    name: pip
+    state: latest
+  become: true
+
+  
 - name: install docker-py
   pip:
     name: "{{item}}"
