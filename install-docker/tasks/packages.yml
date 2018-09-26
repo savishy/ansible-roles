@@ -51,7 +51,7 @@
   become: true
   notify: restart docker
 
- - name: Upgrade Pip 
+- name: Upgrade Pip 
   pip:
     name: pip
     state: latest
