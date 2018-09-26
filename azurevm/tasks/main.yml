@@ -10,19 +10,11 @@
     location: "{{location}}"
     state: present
 
-- name: Get an existing VNET.
+- name: Ensure existing VNET.
   azure_rm_virtualnetwork_facts:
     resource_group: "{{vm_vnet_rg_name}}"
     name: "{{vm_vnet_name}}"
   
-- name: Add Subnets to VNET
-  azure_rm_subnet:
-    resource_group: "{{vm_vnet_rg_name}}"
-    name: "{{vm_subnet_name}}"
-    address_prefix: "{{vm_subnet_addr_prefix}}"
-    virtual_network: "{{vm_vnet_name}}"
-    state: present
-
 - name: Create Public IP for the VM.
   azure_rm_publicipaddress:
     resource_group: "{{rg_name}}"
