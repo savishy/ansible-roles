@@ -2,10 +2,10 @@
 # Prerequisites on localhost (Ansible Controller) to run Ansible AWS modules
 
 - block:
-  - name: ensure pip is installed
-    package:
-      name: python-pip
-      state: present
+  - name: include role to install python pip.
+    include_role:
+      name: common 
+      tasks_from: install-pip 
   - name: ensure prerequisite pip packages
     pip:
       name: '{{item}}'

@@ -4,13 +4,15 @@
 - name: Check if sudo exists (if you are on Azure cloud shell it may not exist)
   shell: command -v sudo >/dev/null 2>&1
   register: sudo_exists
+  changed_when: false
   ignore_errors: yes
   
 - block:
-  - name: ensure pip is installed
-    package:
-      name: python-pip
-      state: present
+  - name: include role to install python pip.
+    include_role:
+      name: common 
+      tasks_from: install-pip 
+      
   - name: ensure prerequisite pip packages
     pip:
       name: '{{item}}'
@@ -20,3 +22,7 @@
     - pywinrm
   become: true
   when: sudo_exists is not failed
+
+- name: Fail if Ansible < 2.5
+  fail: msg="Ansible 2.5+ required"
+  when: ansible_version.major <= 2 and ansible_version.minor < 5
