@@ -1,0 +1,17 @@
+---
+- name: Check if Pip is installed. 
+  shell: command -v pip 2>&1 >/dev/null
+  register: pip_installed 
+  
+
+- block:
+  - name: Download Pip Installer.
+    get_url:
+      url: https://bootstrap.pypa.io/get-pip.py
+      dest: /tmp/get-pip.py
+      force: no
+
+  - name: Run Pip Installer.
+    script: /tmp/get-pip.py
+    become: true
+  when: pip_installed is failed

@@ -46,26 +46,11 @@
   with_items:
     - curl
     - python
-    - python-pip
     - docker-ce
   become: true
   notify: restart docker
 
-- name: Upgrade Pip 
-  pip:
-    name: pip
-    state: latest
-  become: true
-
   
-- name: install docker-py
-  pip:
-    name: "{{item}}"
-    state: present
-  become: true
-  with_items:
-    - docker
-
 # install docker-compose as it is needed by docker-image
 # install 1.9.0 as per bug below:
 # https://github.com/ansible/ansible/issues/20492

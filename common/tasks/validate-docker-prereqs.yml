@@ -1,0 +1,24 @@
+---
+- name: install prerequisite packages for Ubuntu
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+  become: true
+
+- name: ensure python pip is installed.
+  include_role:
+    name: common 
+    tasks_from: install-pip 
+
+ # pyOpenSSL is needed for Docker Registry.
+- name: ensure prerequisite Pip packages for Docker are present.
+  pip:
+    name: '{{item}}'
+    state: present
+  with_items:
+  - 'pyOpenSSL'
+  - 'docker'
+  become: true
