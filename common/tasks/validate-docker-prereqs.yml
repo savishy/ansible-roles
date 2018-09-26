@@ -9,9 +9,7 @@
   become: true
 
 - name: ensure python pip is installed.
-  include_role:
-    name: common 
-    tasks_from: install-pip 
+  include_tasks: install-pip.yml
 
  # pyOpenSSL is needed for Docker Registry.
 - name: ensure prerequisite Pip packages for Docker are present.

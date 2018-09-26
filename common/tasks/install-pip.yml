@@ -2,6 +2,8 @@
 - name: Check if Pip is installed. 
   shell: command -v pip 2>&1 >/dev/null
   register: pip_installed 
+  ignore_errors: true
+  changed_when: false
   
 
 - block:

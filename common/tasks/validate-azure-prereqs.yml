@@ -8,10 +8,8 @@
   ignore_errors: yes
   
 - block:
-  - name: include role to install python pip.
-    include_role:
-      name: common 
-      tasks_from: install-pip 
+  - name: ensure python pip is installed.
+    include_tasks: install-pip.yml
       
   - name: ensure prerequisite pip packages
     pip:
