@@ -57,8 +57,7 @@
     state: present
   become: true
   with_items:
-    - six
-    - docker-py
+    - docker
 
 # install docker-compose as it is needed by docker-image
 # install 1.9.0 as per bug below:
