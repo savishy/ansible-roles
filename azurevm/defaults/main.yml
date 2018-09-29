@@ -9,18 +9,15 @@ vm_size: Standard_D2_v2
 # Naming Conventions for related resources.
 vm_pubip_name: '{{vm_name}}-ip'
 vm_nic_name: '{{vm_name}}-nic'
-vm_vnet_name: '{{vm_name}}-vnet'
+vm_vnet_name: 'vnet0'
 vm_nsg_name: '{{vm_name}}-nsg'
-vm_subnet_name: '{{vm_name}}-subnet'
+vm_subnet_name: 'subnet0'
 
 # IP and Network Details.
 vm_ip_allocation: Static
 
 # Allow VNETs to be stored in a different RG.
-vm_vnet_rg_name: '{{rg_name}}'
-
-vm_vnet_addr_prefix: '10.0.0.0/16'
-vm_subnet_addr_prefix: "10.0.1.0/24"
+vm_vnet_rg_name: 'vnets'
 
 # Create VMs with public IP or not?
 create_vms_with_public_ip: true
@@ -36,7 +33,7 @@ vm_image:
 # VM Tags.
 vm_tags:
   ansible_managed: "true"
-  
+
 # NSG Rules for VM.
 vm_nsg_rules:
 - name: 'SSH'
