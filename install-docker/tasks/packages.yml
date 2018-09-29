@@ -4,6 +4,10 @@
   fail: "{{ ansible_distribution }} is unsupported. Only CentOS and Ubuntu supported."
   when: ansible_distribution != 'Ubuntu' and ansible_distribution != 'CentOS'
 
+- include_role:
+    name: ansible-roles/common
+    tasks_from: validate-docker-prereqs
+
 # add Docker repo to get the latest docker
 - name: add Docker repository for CentOS
   yum_repository:
@@ -26,7 +30,7 @@
       - ca-certificates
 
   - name: add Docker APT Key
-    apt_key: 
+    apt_key:
       url: https://download.docker.com/linux/ubuntu/gpg
       state: present
 
@@ -50,7 +54,7 @@
   become: true
   notify: restart docker
 
-  
+
 # install docker-compose as it is needed by docker-image
 # install 1.9.0 as per bug below:
 # https://github.com/ansible/ansible/issues/20492
