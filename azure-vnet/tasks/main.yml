@@ -1,5 +1,5 @@
 - include_role:
-    name: common
+    name: ansible-roles/common
     tasks_from: validate-azure-prereqs
 
 - name: Ensure VNET resource group exists.

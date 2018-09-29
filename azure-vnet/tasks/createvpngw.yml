@@ -9,7 +9,7 @@
 
 - name: Include tasks to install Azure CLI.
   include_role:
-    name: common
+    name: ansible-roles/common
     tasks_from: install-azure-cli
  
 - name: Az Login.
