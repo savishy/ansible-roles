@@ -1,0 +1,3 @@
+---
+- fail: msg="variable azure_vnet_type undefined"
+  when: azure_vnet_type is not defined

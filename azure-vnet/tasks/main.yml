@@ -2,6 +2,9 @@
     name: ansible-roles/common
     tasks_from: validate-azure-prereqs
 
+- name: check for mandatory undefined vars
+  include_tasks: fail.yml
+
 - name: Ensure VNET resource group exists.
   azure_rm_resourcegroup:
     name: '{{azure_vnet_rg_name}}'

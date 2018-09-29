@@ -5,6 +5,12 @@
 - fail: msg="variable use_azure is not defined, please set it to true to use Azure."
   when: use_azure is not defined
 
+- fail: msg="variable use_sshkey_auth is not defined"
+  when: use_sshkey_auth is not defined
+
+- fail: msg="variable ssh_key_path is not defined"
+  when: ssh_key_path is not defined
+
 - block:
   - name: Retrieve IP address details from Azure.
     azure_rm_publicipaddress_facts:
