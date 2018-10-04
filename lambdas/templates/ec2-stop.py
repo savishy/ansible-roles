@@ -4,7 +4,7 @@
 import boto3
 import os
 # Enter the region your instances are in. Include only the region without specifying Availability Zone; e.g., 'us-east-1'
-region = os.environ['AWS_DEFAULT_REGION']
+region = os.environ['EC2_REGION']
 
 def lambda_handler(event, context):
     ec2 = boto3.client('ec2', region_name=region)

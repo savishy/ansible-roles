@@ -1,11 +1,26 @@
 ---
-- name: Ensure IAM Role exists for Lambda Functions.
-  iam_role:
+- name: Create IAM role for Lambda with custom trust relationship
+  iam:
+    iam_type: role
     name: ansibleAwsLambdaRole
-    assume_role_policy_document: "{{ lookup('file','awsLambdaPolicy.json') }}"
-    managed_policy:
-      - arn:aws:iam::aws:policy/AWSLambdaExecute
-    description: Ansible-managed IAM Role for Lambda functions
+    state: present
+    trust_policy:
+      Version: '2012-10-17'
+      Statement:
+      - Action: sts:AssumeRole
+        Effect: Allow
+        Principal:
+          Service: lambda.amazonaws.com
+  register: iam_role_out
+
+- name: Attach AWS IAM policy to manage EC2 instances to the role.
+  iam_policy:
+    iam_type: role
+    iam_name: ansibleAwsLambdaRole
+    policy_json: "{{lookup('file','awsLambdaPolicy.json')}}"
+    policy_name: ansibleAwsLambdaRolePolicy
+    state: present
+
 - name: Create temp staging dir.
   tempfile:
     state: directory
@@ -23,10 +38,10 @@
 - name: Create a lambda to autoshutdown EC2 instances.
   lambda:
     environment_variables:
-      AWS_DEFAULT_REGION: '{{ec2_region}}'
+      EC2_REGION: '{{ec2_region}}'
     name: ec2-auto-shutdown
     region: '{{ec2_region}}'
     zip_file: '{{staging_dir.path}}/lambda.zip'
     runtime: python2.7
     handler: ec2-stop.lambda_handler
-    role:
+    role: '{{iam_role_out.role_result.arn}}'
