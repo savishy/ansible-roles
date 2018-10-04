@@ -1,0 +1,6 @@
+# https://loige.co/using-lets-encrypt-and-certbot-to-automate-the-creation-of-certificates-for-openvpn/
+
+# sudo certbot --nginx certonly \
+#--email <something@something>.com  \
+# --domains devopsyness.com --domains  www.devopsyness.com \
+# --agree-tos --non-interactive

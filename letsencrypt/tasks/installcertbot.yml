@@ -1,0 +1,23 @@
+---
+# Certbot on Ubuntu Xenial with Nginx
+# https://certbot.eff.org/lets-encrypt/ubuntuxenial-nginx
+- name: Fail if variable undefined.
+  fail:
+    msg: 'server_type is not correctly defined.'
+  when: "server_type is undefined or server_type != 'nginx'"
+
+- block:
+  - name: Ensure repository exists for Certbot.
+    apt_repository:
+      repo: ppa:certbot/certbot
+
+  - name: Ensure software-properties-common
+    package:
+      name: software-properties-common
+      state: present
+
+  - name: Install Certbot for {{server_type}}.
+    package:
+      name: 'python-certbot-{{server_type}}'
+      state: latest
+  become: true

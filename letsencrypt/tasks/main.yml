@@ -1,0 +1,4 @@
+---
+- include_tasks: installcertbot.yml
+- include_tasks: createcertificate.yml
+- include_tasks: renewcertificate.yml

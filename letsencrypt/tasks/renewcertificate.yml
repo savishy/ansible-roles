@@ -1,0 +1,17 @@
+# https://www.onepagezen.com/letsencrypt-auto-renew-certbot-apache/#step1
+---
+- block:
+  - name: Download Certbot-Auto
+    get_url:
+      url: https://dl.eff.org/certbot-auto
+      dest: /etc/letsencrypt/certbot-auto
+      mode: 0755
+  # 0 2 * * 0 /etc/letsencrypt/./certbot-auto renew && /etc/init.d/nginx restart
+  - name: Ensure a job that runs at 2 AM every weekday exists.
+    cron:
+      name: "Autorenew letsencrypt certificate"
+      minute: "0"
+      hour: "2"
+      weekday: "0"
+      job: "/etc/letsencrypt/./certbot-auto renew && /etc/init.d/{{server_type}} restart"
+  become: true
